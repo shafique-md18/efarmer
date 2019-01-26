@@ -2,14 +2,11 @@ from django import forms
 
 
 class ContactForm(forms.Form):
-    full_name = forms.CharField(widget=forms.TextInput(attrs={
-        "class": "form-control", "id": "full_name", "placeholder": "Full Name",
+    full_name = forms.CharField(widget=forms.TextInput(attrs={"id": "full_name", "placeholder": "Full Name",
     }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        "class": "form-control", "placeholder": "Your Email Address",
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Your Email Address",
     }))
-    content = forms.CharField(widget=forms.Textarea(attrs={
-        "class": "form-control", "placeholder": "Your Message",
+    content = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Your Message",
         "rows": "3",
     }))
 
