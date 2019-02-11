@@ -128,4 +128,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+# static url used to host files
 STATIC_URL = '/static/'
+
+# local directory to save static files while development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_local"),
+]
+
+# directory used to serve the static files by the django static files server
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
