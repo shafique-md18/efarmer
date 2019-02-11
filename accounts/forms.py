@@ -30,8 +30,8 @@ class LoginForm(forms.Form):
 class RegistrationForm(forms.Form):
     username = forms.CharField()
     email = forms.EmailField()
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
+    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
