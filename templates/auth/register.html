@@ -8,19 +8,23 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>{{ title }}</title>
+    <title>Register</title>
   </head>
   <body>
     <div class="container">
-        <h1><span class="text-secondary">
-        {% if user.is_authenticated %}
-            Welcome, {{ user.get_username }}. Thanks for logging in.
-            <a href="logout">Logout</a>
-        {% else %}
-            Welcome, new user. Please log in. <br>
-            <a href="login">Login</a>
-        {% endif %}
-        </span></h1>
+        <h1><span class="text-primary">Register</span></h1>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="d-flex col-sm-12 col-12">
+                    {% load crispy_forms_tags %}
+                    <form method="post"> {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Optional JavaScript -->
