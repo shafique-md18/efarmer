@@ -15,10 +15,10 @@
         <h1><span class="text-secondary">
         {% if user.is_authenticated %}
             Welcome, {{ user.get_username }}. Thanks for logging in.
-            <a href="logout">Logout</a>
+            <a href="accounts/logout">Logout</a>
         {% else %}
             Welcome, new user. Please log in. <br>
-            <a href="login">Login</a>
+            <a href="accounts/login">Login</a>
         {% endif %}
         </span></h1>
     </div>
