@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^$', views.home_page, name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^contact/$', views.contact_page),
-    url(r'^accounts/', include('accounts.urls'))
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^products/', include('products.urls')),
 ]
 
 # serve the static files in development env.
