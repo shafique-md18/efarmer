@@ -7,8 +7,8 @@ from django import forms
 def home_page(request):
     product_qs = Product.objects.all()
     category_qs = Category.objects.all()
-    features_qs = Product.objects.get_featured()
-    recently_added_qs = Product.objects.get_recently_added()
+    features_qs = Product.objects.get_featured(5)
+    recently_added_qs = Product.objects.get_recently_added(5)
     context = {
         "title": "E-Farmer | Homepage",
         "products": product_qs,

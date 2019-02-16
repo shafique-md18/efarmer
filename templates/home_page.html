@@ -41,7 +41,7 @@
             <p class="card-text">
                 Rs. {{ obj.selling_price }} /-<hr />
                 <div class="float-right">
-                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
                 </div>
             </p>
             </div>
@@ -58,7 +58,7 @@
             <p class="card-text">
                 Rs. {{ obj.selling_price }} /-<hr />
                 <div class="float-right">
-                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
                 </div>
             </p>
             </div>
@@ -75,7 +75,7 @@
             <p class="card-text">
                 Rs. {{ obj.selling_price }} /-<hr />
                 <div class="float-right">
-                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
                 </div>
             </p>
             </div>
