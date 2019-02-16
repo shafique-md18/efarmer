@@ -1,11 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ContactForm
+from products.models import Product, Category
 from django import forms
 
 def home_page(request):
+    product_qs = Product.objects.all()
+    category_qs = Category.objects.all()
+    features_qs = Product.objects.get_featured()
+    recently_added_qs = Product.objects.get_recently_added()
     context = {
         "title": "E-Farmer | Homepage",
+        "products": product_qs,
+        "categories": category_qs,
+        "featured_products": features_qs,
+        "recently_added": recently_added_qs,
     }
     return render(request, "home_page.html", context)
 

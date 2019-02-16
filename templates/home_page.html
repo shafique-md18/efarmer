@@ -22,6 +22,68 @@
             <a href="accounts/register" class="display-5">Sign Up</a>
         {% endif %}
         </span></h1>
+        <hr />
+        <div class="categories">
+            <h3 class="display-4">Categories</h3>
+            <ul>
+            {% for q in categories %}
+                <li>{{ q }}</li>
+            {% endfor %}
+            </ul>
+
+            <hr />
+
+            <h3 class="display-5">Featured Products</h3>
+            {% for obj in featured_products %}
+            <div class="card mx-auto" style="width: 18rem;">
+            <div class="card-body bg-light mr-100">
+            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
+            <p class="card-text">
+                Rs. {{ obj.selling_price }} /-<hr />
+                <div class="float-right">
+                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                </div>
+            </p>
+            </div>
+            </div>
+            {% endfor %}
+
+            <hr />
+            <div>
+            <h3 class="display-5">All Products</h3>
+            {% for obj in products %}
+            <div class="card mx-auto" style="width: 18rem;">
+            <div class="card-body bg-light mr-100">
+            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
+            <p class="card-text">
+                Rs. {{ obj.selling_price }} /-<hr />
+                <div class="float-right">
+                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                </div>
+            </p>
+            </div>
+            </div>
+            {% endfor %}
+            </div>
+
+            <div>
+            <h3 class="display-5">Recently Added</h3>
+            {% for obj in recently_added %}
+            <div class="card mx-auto" style="width: 18rem;">
+            <div class="card-body bg-light mr-100">
+            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
+            <p class="card-text">
+                Rs. {{ obj.selling_price }} /-<hr />
+                <div class="float-right">
+                    <a class="btn btn-primary" href="products/{{ obj.pk }}/">View Details</a>
+                </div>
+            </p>
+            </div>
+            </div>
+            {% endfor %}
+            </div>
+
+        </div>
     </div>
 
     <!-- Optional JavaScript -->

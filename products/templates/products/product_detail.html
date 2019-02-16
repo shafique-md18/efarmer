@@ -21,9 +21,10 @@
             <h5 class="card-title text-primary display-5">{{ object }}</h5>
             <img class="img-fluid" width="400px" height="400px" src='{{ object.image.url }}' />
             <p class="card-text">
+            <span class="h5 text-primary mb-1">Category: {{ object.category }}</span> <br />
             <span class="h5">Description:</span>
             {{ object.description | linebreaks}} <br />
-            <span class="h1 text-danger">Rs. {{ object.price }} /-</span><hr />
+            <span class="h1 text-danger">Rs. {{ object.selling_price }} /-</span><hr />
             </p> <br>
             <div>
                 <button class="btn btn-secondary">Add to cart</button>
