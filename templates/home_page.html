@@ -1,95 +1,32 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %} {% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title>{{ title }}</title>
-  </head>
-  <body>
     <div class="container">
-        <h1><span class="text-secondary">
-        {% if user.is_authenticated %}
-            Welcome, {{ user.get_username }}. Thanks for logging in.
-            <a href="accounts/logout">Logout</a>
-        {% else %}
-            Welcome, new user. Please log in. <br>
-            <a href="accounts/login" class="display-5">Login</a>
-            <a href="accounts/register" class="display-5">Sign Up</a>
-        {% endif %}
-        </span></h1>
-        <hr />
-        <div class="categories">
-            <h3 class="display-4">Categories</h3>
-            <ul>
-            {% for q in categories %}
-                <li>{{ q }}</li>
-            {% endfor %}
-            </ul>
-
-            <hr />
-
-            <h3 class="display-5">Featured Products</h3>
-            {% for obj in featured_products %}
-            <div class="card mx-auto" style="width: 18rem;">
-            <div class="card-body bg-light mr-100">
-            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
-            <p class="card-text">
-                Rs. {{ obj.selling_price }} /-<hr />
-                <div class="float-right">
-                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
-                </div>
-            </p>
-            </div>
-            </div>
-            {% endfor %}
-
-            <hr />
-            <div>
-            <h3 class="display-5">All Products</h3>
-            {% for obj in products %}
-            <div class="card mx-auto" style="width: 18rem;">
-            <div class="card-body bg-light mr-100">
-            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
-            <p class="card-text">
-                Rs. {{ obj.selling_price }} /-<hr />
-                <div class="float-right">
-                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
-                </div>
-            </p>
-            </div>
-            </div>
-            {% endfor %}
-            </div>
-
-            <div>
-            <h3 class="display-5">Recently Added</h3>
-            {% for obj in recently_added %}
-            <div class="card mx-auto" style="width: 18rem;">
-            <div class="card-body bg-light mr-100">
-            <h5 class="card-title text-primary display-5">{{ obj.title }}</h5>
-            <p class="card-text">
-                Rs. {{ obj.selling_price }} /-<hr />
-                <div class="float-right">
-                    <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>
-                </div>
-            </p>
-            </div>
-            </div>
-            {% endfor %}
-            </div>
-
+        {% include "categories.html" %}
+{#        Featured Products#}
+        <div
+        class="col-md-12 d-flex justify-content-center text-capitalize mt-5"
+        >
+        <h2 class="border-bottom-orange">featured products</h2>
+        </div>
+        <div class="row d-flex justify-content-center mt-5">
+        {% for fp in featured_products %}
+        {% include "products/snippets/card.html" with obj=fp %}
+        {% endfor %}
+        </div>
+{#        Recently added#}
+        <div
+        class="col-md-12 d-flex justify-content-center text-capitalize mt-5"
+        >
+        <h2 class="border-bottom-orange">recently added</h2>
+        </div>
+        <div class="row d-flex justify-content-center mt-5">
+        {% for ra in recently_added %}
+        {% include "products/snippets/card.html" with obj=ra %}
+        {% endfor %}
         </div>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  </body>
-</html>
+{% endblock content %}

@@ -24,9 +24,9 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home_page, name='home'),
     url(r'^admin/', admin.site.urls),
-    url(r'^contact/$', views.contact_page),
+    url(r'^contact/$', views.contact_page, name='contact'),
     url(r'^accounts/', include('accounts.urls')),
-    url(r'^products/', include('products.urls')),
+    url(r'^products/', include('products.urls', namespace='products')),
 ]
 
 # serve the static files in development env.

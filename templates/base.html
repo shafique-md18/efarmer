@@ -1,0 +1,406 @@
+{#{% load static %}#}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#  <head>#}
+{#    <!-- Required meta tags -->#}
+{#    <meta charset="utf-8" />#}
+{#    <meta#}
+{#      name="viewport"#}
+{#      content="width=device-width, initial-scale=1, shrink-to-fit=no"#}
+{#    />#}
+{##}
+{#    <!-- Bootstrap CSS -->#}
+{#    <link#}
+{#      rel="stylesheet"#}
+{#      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"#}
+{#      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"#}
+{#      crossorigin="anonymous"#}
+{#    />#}
+{#    <link rel="stylesheet" href="{% static '/css/base.css' %}">#}
+{#    <title>{% block title %}{% endblock title %}</title>#}
+{#  </head>#}
+{#  <body>#}
+{#    {% include 'products/snippets/navbar.html' with categories=categories %} #}
+{#    {% block content %} {% endblock content %}#}
+{##}
+{#    <!-- Optional JavaScript -->#}
+{#    <!-- jQuery first, then Popper.js, then Bootstrap JS -->#}
+{#    <script#}
+{#      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
+{#      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
+{#      crossorigin="anonymous"#}
+{#    ></script>#}
+{#    <script#}
+{#      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"#}
+{#      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"#}
+{#      crossorigin="anonymous"#}
+{#    ></script>#}
+{#    <script#}
+{#      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"#}
+{#      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"#}
+{#      crossorigin="anonymous"#}
+{#    ></script>#}
+{#  </body>#}
+{#</html>#}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Karla"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static '/css/base.css' %}">
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+
+  <body>
+    <!-- Super Container for the whole body -->
+    <div class="super_container">
+      <!-- Header with info bar and the navigation bar -->
+      <header class="header">
+        <!-- Top info nav bar -->
+        <div class="top_nav">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="top_nav_left">
+                  free shipping on all orders over ₹500
+                </div>
+              </div>
+              <div class="col-md-6 text-right">
+                <div class="top-nav-right">
+                  <ul class="top-nav-menu">
+                    <li class="drop_down text-uppercase">inr</li>
+                    <li class="drop_down text-capitalize">english</li>
+                    <li class="drop_down">
+                      <a href="#">
+                        My Account
+                        <i class="fa fa-angle-down"></i>
+                      </a>
+                      <ul class="drop_down_selection text-left">
+                        <li>
+                          <a href="#">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#"
+                            ><i class="fas fa-user-plus" aria-hidden="true"></i
+                            >Register</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Top nav ends -->
+
+        <!-- Main navigation bar -->
+        <div class="main-nav-container">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="display-4">
+                  <a href="{% url "home" %}" class="text-dark"
+                    >e<span class="logo-farmer">farmer</span></a
+                  >
+                </div>
+              </div>
+              <div class="col-md-6 text-right">
+                <div class="main-nav-right">
+                  <ul class="main-nav-menu">
+                    <li class="drop_down text-uppercase display-5">
+                      <a href="{% url 'home' %}">home</a>
+                    </li>
+                    <li class="drop_down text-uppercase">
+                      <a href="#">
+                        Categories
+                        <i class="fa fa-angle-down"></i>
+                      </a>
+                      <ul class="drop_down_selection text-left text-capitalize">
+                        <li>
+                          <a href="#"> horticulture seeds</a>
+                        </li>
+                        <li>
+                          <a href="#">field crops</a>
+                        </li>
+                        <li>
+                          <a href="#">forage seeds</a>
+                        </li>
+                        <li>
+                          <a href="#">field crops</a>
+                        </li>
+                        <li>
+                          <a href="#">plant nutrients</a>
+                        </li>
+                        <li>
+                          <a href="#">pesticides</a>
+                        </li>
+                        <li>
+                          <a href="#">tools and instruments</a>
+                        </li>
+                        <li>
+                          <a href="#">urban garden seeds</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="drop_down text-uppercase">
+                      <a href="#">contact</a>
+                    </li>
+                    <li class="drop_down">
+                      <a href="#"><i class="fas fa-search"></i></a>
+                    </li>
+                    <li class="drop_down">
+                      <a href="#"><i class="fas fa-user-alt"></i></a>
+                    </li>
+                    <li class="drop_down">
+                      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+        {% block content %}{% endblock %}
+
+{#    <div class="container">#}
+{#        {% include "categories.html" %}#}
+{#        {% include "featured.html" with featured=featured_products %}#}
+
+
+{#        <div class="row categories">#}
+{#          <div#}
+{#            class="col-md-12 d-flex justify-content-center text-capitalize mt-5"#}
+{#          >#}
+{#            <h2>featured products</h2>#}
+{#          </div>#}
+{#        </div>#}
+{#        <!-- <div class="d-flex justify-content-around mt-5"> -->#}
+{#        <div class="row d-flex justify-content-center mt-5">#}
+{#          <div class="card" style="width: 18rem;">#}
+{#            <a href="#">#}
+{#              <img#}
+{#                class="card-img-top"#}
+{#                src="http://placehold.it/286x180"#}
+{#                alt="#"#}
+{#            /></a>#}
+{##}
+{#            <div class="card-body">#}
+{#              <h5 class="card-title text-uppercase">P3546 CORN</h5>#}
+{#              <p class="text-danger text-bold">Rs. 500/-</p>#}
+{#              <p class="card-text">#}
+{#                A leafy disease tolerant hybrid with fatty cobs translating to#}
+{#                high yields. Suitable for Kharif & Rabi seasons.#}
+{#              </p>#}
+{#            </div>#}
+{#            <div class="cc">#}
+{#              <a class="btn btn-sm btn-block btn-danger py-2" href="#"#}
+{#                >Add to Cart</a#}
+{#              >#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <div class="card" style="width: 18rem;">#}
+{#            <a href="#">#}
+{#              <img#}
+{#                class="card-img-top"#}
+{#                src="http://placehold.it/286x180"#}
+{#                alt="#"#}
+{#            /></a>#}
+{##}
+{#            <div class="card-body">#}
+{#              <h5 class="card-title text-uppercase">P3546 CORN</h5>#}
+{#              <p class="text-danger text-bold">Rs. 500/-</p>#}
+{#              <p class="card-text">#}
+{#                A leafy disease tolerant hybrid with fatty cobs translating to#}
+{#                high yields. Suitable for Kharif & Rabi seasons.#}
+{#              </p>#}
+{#            </div>#}
+{#            <div class="cc">#}
+{#              <a class="btn btn-sm btn-block btn-danger py-2" href="#"#}
+{#                >Add to Cart</a#}
+{#              >#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <div class="card" style="width: 18rem;">#}
+{#            <a href="#">#}
+{#              <img#}
+{#                class="card-img-top"#}
+{#                src="http://placehold.it/286x180"#}
+{#                alt="#"#}
+{#            /></a>#}
+{##}
+{#            <div class="card-body">#}
+{#              <h5 class="card-title text-uppercase">P3546 CORN</h5>#}
+{#              <p class="text-danger text-bold">Rs. 500/-</p>#}
+{#              <p class="card-text">#}
+{#                A leafy disease tolerant hybrid with fatty cobs translating to#}
+{#                high yields. Suitable for Kharif & Rabi seasons.#}
+{#              </p>#}
+{#            </div>#}
+{#            <div class="cc">#}
+{#              <a class="btn btn-sm btn-block btn-danger py-2" href="#"#}
+{#                >Add to Cart</a#}
+{#              >#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <div class="card" style="width: 18rem;">#}
+{#            <a href="#">#}
+{#              <img#}
+{#                class="card-img-top"#}
+{#                src="http://placehold.it/286x180"#}
+{#                alt="#"#}
+{#            /></a>#}
+{##}
+{#            <div class="card-body">#}
+{#              <h5 class="card-title text-uppercase">P3546 CORN</h5>#}
+{#              <p class="text-danger text-bold">Rs. 500/-</p>#}
+{#              <p class="card-text">#}
+{#                A leafy diseasdlkjaffdke tolerant hybrid with fatty cobs#}
+{#                translating to high yields. Suitable for Kharif & Rabi seasons.#}
+{#              </p>#}
+{#            </div>#}
+{#            <div class="cc">#}
+{#              <a class="btn btn-sm btn-block btn-danger py-2" href="#"#}
+{#                >Add to Cart</a#}
+{#              >#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <div class="card" style="width: 18rem;">#}
+{#            <a href="#">#}
+{#              <img#}
+{#                class="card-img-top"#}
+{#                src="http://placehold.it/286x180"#}
+{#                alt="#"#}
+{#            /></a>#}
+{##}
+{#            <div class="card-body">#}
+{#              <h5 class="card-title text-uppercase">P3546 CORN</h5>#}
+{#              <p class="text-danger text-bold">Rs. 500/-</p>#}
+{#              <p class="card-text">#}
+{#                A leafy disease tolerant hybrid with fatty cobs translating to#}
+{#                high yields. Suitable for Kharif & Rabi seasons.#}
+{#              </p>#}
+{#            </div>#}
+{#            <div class="cc">#}
+{#              <a class="btn btn-sm btn-block btn-danger py-2" href="#"#}
+{#                >Add to Cart</a#}
+{#              >#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+
+      <div class="newsletter">
+        <div class="container py-3">
+          <div class="row">
+            <div class="col-6">
+              <div class="row join text-capitalize">
+                <div class="col">join our mail list</div>
+              </div>
+              <div class="row join-info">
+                <div class="col">
+                  Subscribe to our newsletter and get 20% off your first
+                  purchase
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <input
+                type="email"
+                class="form-control rounded-0 mr-0"
+                id="exampleFormControlInput1"
+                placeholder="name@example.com"
+              />
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-primary rounded-0 ml-0">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-light">
+      <div class="container text-left">
+        <div class="row py-5">
+          <div class="col-md-6">
+            <ul class="d-flex align-items-left">
+              <li class="pr-3"><a href="#">FAQs</a></li>
+              <li class="pr-3"><a href="#">Contact us</a></li>
+              <li class="pr-3"><a href="#">Our Cancellation Policy</a></li>
+              <li class="pr-3"><a href="#">Returns and refunds</a></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul class="d-flex justify-content-end align-items-center">
+              <li class="pl-3">
+                <a href="#"><i class="fab fa-facebook-square"></i></a>
+              </li>
+              <li class="pl-3">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+              </li>
+              <li class="pl-3">
+                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+

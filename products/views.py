@@ -1,17 +1,34 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Product
+from .models import Product, Category
 from django.http import Http404
+import string
 from django.shortcuts import get_object_or_404
 
 
 class ProductListView(ListView):
-    queryset = Product.objects.all()
     template_name = "products/product_list.html"
 
     def get_context_data(self, **kwargs):
+        slug = self.kwargs.get('slug')
+        slugqs = Category.objects.filter(slug__iexact=slug)
+        print(slugqs)
+        if slugqs.count() == 0:
+            raise Http404("Category Doesn't Exist!")
         context = super(ProductListView, self).get_context_data(**kwargs)
+        context['category'] = slugqs.first().name.capitalize()
         return context
+
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs.get('slug')
+        # print(Product.objects.filter(category__name__iexact=category))
+        try:
+            categoryqs = Category.objects.filter(slug__iexact=slug)
+        except Category.DoesNotExist:
+            raise Http404("Category does not exist!")
+        except:
+            raise Http404("Something terrible has happened!")
+        return Product.objects.filter(category__slug__iexact=slug)
 
 
 class ProductDetailView(DetailView):
@@ -20,9 +37,6 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, pk=None, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-        print(context['object'].title)
-        print(context['object'].description)
-        print(context['object'].selling_price)
         return context
 
     def get_object(self, **kwargs):

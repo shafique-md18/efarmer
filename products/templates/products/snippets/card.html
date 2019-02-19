@@ -1,0 +1,37 @@
+{#<div class="card mx-auto" style="width: 18rem;">#}
+{#  <div class="card-body bg-light mr-100">#}
+{#    <h5 class="card-title text-primary display-5 text-truncate">{{ obj.title }}</h5>#}
+{#   {% if obj.image %}#}
+{#     <img class="card-img-top" src={{ obj.image.url }} alt={{ obj.title }}>#}
+{#   {% endif %}#}
+{#   <p class="card-text">#}
+{#   Rs. {{ obj.selling_price }} /-<hr />#}
+{#   <div class="float-right">#}
+{#     <a class="btn btn-primary" href="{{ obj.get_absolute_url }}">View Details</a>#}
+{#   </div>#}
+{#   </p>#}
+{#  </div>#}
+{#</div>#}
+
+
+<div class="card" style="width: 18rem;">
+    <a href="{{ obj.get_absolute_url }}">
+      <img
+        class="card-img-top"
+        src={{ obj.image.url }}
+        alt={{ obj.name }}
+              width="200px" height="250px"
+    /></a>
+
+    <div class="card-body">
+      <h5 class="card-title">{{ obj.name }}</h5>
+      <p class="card-selling-price text-danger text-bold">₹ {{ obj.selling_price }}/-</p>
+      <p class="card-text text-truncate"> {{ obj.description }}
+      </p>
+    </div>
+    <div class="cc">
+      <a class="btn btn-sm btn-block btn-danger py-2" href="#"
+        >Add to Cart</a
+      >
+    </div>
+</div>

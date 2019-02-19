@@ -3,6 +3,7 @@ import os
 from uuid import uuid4
 from django.db.models.signals import pre_save
 from .utils import unique_slug_generator
+from django.urls import reverse
 
 
 def path_and_rename(instance, filename):
@@ -18,12 +19,17 @@ def path_and_rename(instance, filename):
 
 
 class Category(models.Model):
-    name = models.CharField('Category', max_length=20, default="", db_index=True, unique=True)
+    name = models.CharField('Category', max_length=30, default="", db_index=True, unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     class Meta:
         ordering = ('name', )
         verbose_name = 'category'
         verbose_name_plural = 'categories'
+
+
+    def get_absolute_url(self):
+        return reverse('products:product_list', kwargs={"slug":self.slug})
 
     def __str__(self):
         return self.name
@@ -58,7 +64,7 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
-    title = models.CharField('Product Title', max_length=120)
+    name = models.CharField('Product Name', max_length=120)
     brand = models.CharField('Brand', default="", max_length=120)
     size = models.CharField('Size', default="", max_length=10, blank=True)
     stock = models.PositiveIntegerField('Stock', default=0)
@@ -76,7 +82,7 @@ class Product(models.Model):
     objects = ProductManager()
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('name', )
 
 
     def clean(self):
@@ -89,7 +95,7 @@ class Product(models.Model):
             raise ValidationError("Selling Price cannot be greater than MRP.")
 
     def get_absolute_url(self):
-        return f'/products/{self.slug}/'
+        return reverse('products:product_detail', kwargs={"slug":self.slug})
 
 
     def is_featured(self):
@@ -99,11 +105,13 @@ class Product(models.Model):
         return self.stock > 0
 
     def __str__(self):
-        return self.title
+        return self.name
 
-def product_pre_save_receiver(sender, instance, **kwargs):
+def pre_save_receiver(sender, instance, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
-pre_save.connect(product_pre_save_receiver, Product)
+
+pre_save.connect(pre_save_receiver, Product)
+pre_save.connect(pre_save_receiver, Category)
 
