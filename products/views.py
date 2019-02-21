@@ -2,28 +2,32 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Product, Category
 from django.http import Http404
-import string
 from django.shortcuts import get_object_or_404
 
 
-class ProductListView(ListView):
+class ProductCategoryListView(ListView):
     template_name = "products/product_list.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Method is used here just to have the category name in the context object
+        :param kwargs:
+        :return:
+        """
         slug = self.kwargs.get('slug')
-        slugqs = Category.objects.filter(slug__iexact=slug)
-        print(slugqs)
-        if slugqs.count() == 0:
-            raise Http404("Category Doesn't Exist!")
-        context = super(ProductListView, self).get_context_data(**kwargs)
-        context['category'] = slugqs.first().name.capitalize()
+        # context is obtained from the get_queryset() method defined below
+        context = super(ProductCategoryListView, self).get_context_data(**kwargs)
+        category = Category.objects.get(slug__iexact=slug)
+        context['category'] = category.name.capitalize()
+        print(context)
         return context
 
     def get_queryset(self, **kwargs):
+        # get the query set for the matching category of products
         slug = self.kwargs.get('slug')
-        # print(Product.objects.filter(category__name__iexact=category))
         try:
-            categoryqs = Category.objects.filter(slug__iexact=slug)
+            # category is expected to be a single distinct object
+            category = Category.objects.get(slug__iexact=slug)
         except Category.DoesNotExist:
             raise Http404("Category does not exist!")
         except:

@@ -29,7 +29,8 @@ class Category(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('products:product_list', kwargs={"slug":self.slug})
+        # Reverse: no need to give the path to url just reference the name of url
+        return reverse('products:product_category_list', kwargs={"slug":self.slug})
 
     def __str__(self):
         return self.name
@@ -52,7 +53,8 @@ class ProductManager(models.Manager):
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
-        if qs.count() == 1:
+        if qs.count() > 0: # more than one product with same id
+            # return the first
             return qs.first()
         return None
 
@@ -107,11 +109,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+# Receiver mechanism to assign the slug value every time a
+# new object of any model class is created
 def pre_save_receiver(sender, instance, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
 
+# connect the pre_save signal to the appropriate receiver
 pre_save.connect(pre_save_receiver, Product)
 pre_save.connect(pre_save_receiver, Category)
 
