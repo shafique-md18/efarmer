@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}
+    E-Farmer | {{ category }}
+{% endblock %}
+
+
+{% block content %}
+{#    <div class="container">#}
+{#        <div class="display-4 text-info mt-2">{{ category }}</div>#}
+{#    </div>#}
+    <div class="container">
+{#        <div#}
+{#        class="col-md-12 d-flex justify-content-center text-capitalize mt-5"#}
+{#        >#}
+{#        </div>#}
+        {% if query %}
+            <h4 class="display-5 mt-2">Results for <b>{{ query }}</b></h4> <hr />
+            {% if object_list.count == 0 %}
+            <div class="display-4 text-primary my-5">
+            No Products To Show :(
+            </div> <hr />
+            <div class="display-4 text-danger my-5">
+            Featured Products
+            </div>
+            <div class="row d-flex justify-content-center mt-5">
+            {% for p in featured_list %}
+            {% include "products/snippets/card.html" with obj=p %}
+            {% endfor %}
+            </div>
+            {% else %}
+                <div class="row d-flex justify-content-center mt-5">
+                {% for p in object_list %}
+                {% include "products/snippets/card.html" with obj=p %}
+                {% endfor %}
+            {% endif %}
+            </div>
+        {% else %}
+{#        {% if object_list is None %}#}
+{#            <div class="display-4 text-primary my-5">#}
+{#            No Products To Show :(#}
+{#            </div>#}
+{#            <div class="display-3 text-danger my-5">#}
+{#            Featured Products#}
+{#            </div>#}
+{#            <div class="row d-flex justify-content-center mt-5">#}
+{#            {% for p in featured_list %}#}
+{#            {% include "products/snippets/card.html" with obj=p %}#}
+{#            {% endfor %}#}
+{#            </div>#}
+{#        {% endif %}#}
+        <div class="row">
+            <div class="col-md-12 mx-auto d-flex justify-content-center">
+            <form method="GET" action="" class="mt-4">
+            <div class="form-group">
+            <label class="display-4 text-primary" for="searchquery">Search For Products</label>
+            <input type="text" name="q" class="form-control" placeholder="{{ request.GET.q }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            </div>
+        </div>
+        <div class="display-4 text-danger my-5">
+        Featured Products
+        </div>
+        <div class="row d-flex justify-content-center mt-5">
+        {% for p in featured_list %}
+        {% include "products/snippets/card.html" with obj=p %}
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

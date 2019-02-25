@@ -43,6 +43,10 @@ class ProductQuerySet(models.query.QuerySet):
     def recently_added(self):
         return self.all().order_by('-created_at')
 
+    def search(self, query):
+        lookups = models.Q(name__icontains=query) | models.Q(description__icontains=query)
+        return self.filter(lookups).distinct()
+
 class ProductManager(models.Manager):
     """ extend existing product manager,
         provide database query operations
@@ -53,7 +57,7 @@ class ProductManager(models.Manager):
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
-        if qs.count() > 0: # more than one product with same id
+        if qs.count() == 1: # a single queryset with products of same id
             # return the first
             return qs.first()
         return None
@@ -63,6 +67,9 @@ class ProductManager(models.Manager):
 
     def get_recently_added(self, num_of_products=0):
         return self.get_queryset().recently_added()[:num_of_products]
+
+    def search(self, query):
+        return self.get_queryset().search(query)
 
 
 class Product(models.Model):

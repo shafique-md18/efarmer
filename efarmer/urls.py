@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^contact/$', views.contact_page, name='contact'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^products/', include('products.urls', namespace='products')),
+    url(r'^search/', include('search.urls', namespace='search')),
 ]
 
 # serve the static files in development env.

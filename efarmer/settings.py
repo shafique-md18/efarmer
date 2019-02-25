@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['localhost', '.ngrok.io']
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'products.apps.ProductsConfig',
+    'search.apps.SearchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
