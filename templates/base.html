@@ -100,18 +100,31 @@
                         <i class="fa fa-angle-down"></i>
                       </a>
                       <ul class="drop_down_selection text-left">
+                        {% if user.is_authenticated %}
+                            <li>
+                            <a href="" class="mx-auto">
+                            {{ user.username }}</a>
+                            </li>
+                          <li>
+                          <a href="{% url 'logout_user' %}">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Logout</a
+                          >
+                        </li>
+                        {% else %}
                         <li>
-                          <a href="#">
+                          <a href="{% url 'login_page' %}">
                             <i class="fas fa-sign-in-alt"></i>
                             Sign In</a
                           >
                         </li>
                         <li>
-                          <a href="#"
+                          <a href="{% url 'register_page' %}"
                             ><i class="fas fa-user-plus" aria-hidden="true"></i
                             >Register</a
                           >
                         </li>
+                        {% endif %}
                       </ul>
                     </li>
                   </ul>
@@ -181,7 +194,7 @@
                       <a href="#"><i class="fas fa-user-alt"></i></a>
                     </li>
                     <li class="drop_down">
-                      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                      <a href="{% url 'carts:cart' %}"><i class="fas fa-shopping-cart"></i></a>
                     </li>
                   </ul>
                 </div>

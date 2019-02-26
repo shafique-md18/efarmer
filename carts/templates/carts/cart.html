@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}
+    E-Farmer | My Cart
+{% endblock %}
+
+{% block content %}
+{#    <div class="container">#}
+{#    <h1 class="display-4 text-danger my-3">My Cart</h1>#}
+{#    <ul>#}
+{#    {% for co in cart_obj.products.all %}#}
+{#        <li><p>{{ co.name }} | {{ co.selling_price }}</p></li>#}
+{#    {% endfor %}#}
+{#    <h5>{{ cart_obj.total }}</h5>#}
+{#    </ul>#}
+{#    </div>#}
+
+    <div class="container">
+        <h1 class="display-4 text-danger my-3">My Cart</h1>
+	<table id="cart" class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width:50%">Product</th>
+                <th style="width:10%">Price</th>
+                <th style="width:8%">Quantity</th>
+                <th style="width:22%" class="text-center">Subtotal</th>
+                <th style="width:10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in cart_obj.products.all %}
+            <tr>
+                <td data-th="Product">
+                    <div class="row">
+                        <div class="col-sm-2 hidden-xs">
+                            <img src="{{ product.image.url }}" alt="" class="img-responsive"
+                                 width="100px" height="100px" /></div>
+                        <div class="col-sm-10">
+                            <h5 class="ml-3">{{ product.name }}</h5>
+                            <p></p>
+                        </div>
+                    </div>
+                </td>
+                <td data-th="Price">₹{{ product.selling_price }}</td>
+                <td data-th="Quantity">
+                    <input type="number" class="form-control text-center" value="1">
+                </td>
+                <td data-th="Subtotal" class="text-center">{{ product.selling_price }}</td>
+                <td class="actions" data-th="">
+                    <button class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button>
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="visible-xs">
+                <td class="text-center"><strong>Total {{ cart_obj.total }}</strong></td>
+            </tr>
+            <tr>
+                <td><a href="{% url 'home' %}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+                <td colspan="2" class="hidden-xs"></td>
+                <td class="hidden-xs text-center"><strong>Total {{ cart_obj.total }}</strong></td>
+                <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fas fa-angle-right"></i></a></td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+{% endblock %}

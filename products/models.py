@@ -79,7 +79,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField('Stock', default=0)
     description = models.TextField('Description', blank=True, default="")
     maximum_retail_price = models.DecimalField('Maximum Retail Price', max_digits=10, decimal_places=2, default=0.00)
-    selling_price = models.DecimalField('Selling Price', max_digits=10, decimal_places=2, default=0.00)
+    selling_price = models.DecimalField('Selling Price', max_digits=20, decimal_places=2, default=0.00)
     image = models.ImageField('Product Image', upload_to=path_and_rename, default='image_not_available.jpg')
     featured = models.BooleanField('Add to featured products?', default=False)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)

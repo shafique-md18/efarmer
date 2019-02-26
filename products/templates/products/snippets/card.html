@@ -30,8 +30,14 @@
       </p>
     </div>
     <div class="cc">
-      <a class="btn btn-sm btn-block btn-danger py-2" href="#"
-        >Add to Cart</a
-      >
+      <form action="{% url 'carts:cart_update' %}" method="POST">{% csrf_token %}
+          <input type="hidden" value="{{ obj.id }}" name="product_id">
+{#          <a class="btn btn-sm btn-block btn-danger py-2" href="#">#}
+{#              Add to Cart#}
+{#          </a>#}
+          <button class="btn btn-sm btn-block btn-danger py-2 rounded-0" type="submit">
+              Add to Cart
+          </button>
+      </form>
     </div>
 </div>

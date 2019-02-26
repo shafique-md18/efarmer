@@ -49,5 +49,7 @@ def register_page(request):
 
 def logout_user(request):
     if request.user.is_authenticated():
+        # remove cart when user logs out
+        request.session['cart_id'] = None
         logout(request)
     return redirect("home")

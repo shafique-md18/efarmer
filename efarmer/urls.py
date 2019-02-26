@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^products/', include('products.urls', namespace='products')),
     url(r'^search/', include('search.urls', namespace='search')),
+    url('^cart/', include('carts.urls', namespace='carts')),
 ]
 
 # serve the static files in development env.
