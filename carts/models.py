@@ -6,18 +6,17 @@ from django.db.models.signals import pre_save, m2m_changed
 
 class CartManager(models.Manager):
     def get_or_create_cart(self, cart_id=None):
-        cart_obj = None
+        obj = None
         if cart_id is None:
-            cart_obj = Cart()
-            cart_obj.save()
-            is_new_cart = True
+            obj = Cart()
+            obj.save()
         else:
-            cart_qs =  self.get_queryset().filter(id=cart_id)
-            if cart_qs.count() == 1:
-                cart_obj = cart_qs.first()
+            qs =  self.get_queryset().filter(id=cart_id)
+            if qs.count() == 1:
+                obj = qs.first()
             else:
-                raise Exception(f'Error while looking up cart via cart_id')
-        return cart_obj
+                raise Exception(f'Error while looking up cart via cart_id: {cart_id}')
+        return obj
 
 
 class Cart(models.Model):

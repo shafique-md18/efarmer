@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django import forms
+from django.utils.http import is_safe_url
 from .forms import LoginForm, RegistrationForm
 from django.http import HttpResponse
 
@@ -11,6 +12,11 @@ def login_page(request):
     context = {
         "form": form,
     }
+    next_ = request.GET.get('next', None)
+    next_post = request.POST.get('next', None)
+    redirect_to = next_ or next_post
+    if request.user.is_authenticated():
+        return redirect(redirect_to or "home")
     if form.is_valid():
         # get username and password
         username = form.cleaned_data.get("username")
@@ -21,9 +27,13 @@ def login_page(request):
             login(request, user)
             # clear the form when the user logs in
             context['form'] = LoginForm()  # empty form
+
+            # redirect user
+            if redirect_to and is_safe_url(redirect_to):
+                return redirect(redirect_to)
             return redirect("home")
         else:
-            raise forms.ValidationError("Username and Password Mismatch!")
+            context['login_error'] = True
     return render(request, "auth/login.html", context)
 
 

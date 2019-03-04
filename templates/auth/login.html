@@ -8,11 +8,14 @@
         <h1><span class="text-primary">Login</span></h1>
         <hr>
         <div class="row">
-            <div class="col">
+            <div class="col-12 col-md-6">
                 <div class="d-flex col-sm-12 col-12">
                     {% load crispy_forms_tags %}
                     <form method="post"> {% csrf_token %}
                         {{ form|crispy }}
+                        {% if login_error %}
+                            <p>Username and password error!</p> <hr>
+                        {% endif %}
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

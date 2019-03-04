@@ -4,11 +4,14 @@ from products.models import Product
 
 
 def cart_home(request):
+    # user already has a cart_id assigned to him, or get a new cart as a guest
     cart_obj = Cart.objects.get_or_create_cart(request.session.get('cart_id', None))
+    # merge carts if the user has logged in
     cart_id = associate_user_with_cart(request, cart_obj.id)
     if cart_id != cart_obj.id: # if the user has logged in
         request.session['cart_id'] = cart_id
-    print(f'Cart ID: {cart_id}\nCart Obj: {Cart.objects.get(id=cart_id)}')
+        # cart_obj is old guest cart and will be deleted if the same user logs in
+        cart_obj = Cart.objects.get_or_create_cart(cart_id)
     context = {
         'cart_obj': cart_obj,
     }
@@ -26,7 +29,7 @@ def cart_update(request):
         request.session['cart_id'] = cart_obj.id
         cart_obj.save()
     else:
-        return HttpResponse('Error')
+        raise Exception("Error while updating cart!")
     context = {
         'cart_products': cart_obj.products.all(),
     }
@@ -35,7 +38,7 @@ def cart_update(request):
     return redirect('carts:cart')
 
 def associate_user_with_cart(request, cart_id=None):
-    # get the cart obj
+    # get the cart of the current user, guest or otherwise
     cart_obj = Cart.objects.get_or_create_cart(cart_id)
     # associate user with cart if user logs in after cart creation
     if request.user.is_authenticated() and cart_obj.user is None:
@@ -60,4 +63,5 @@ def associate_user_with_cart(request, cart_id=None):
     else:
         # user is not authenticated, and the cart is guest
         pass
+    # this is the user cart if he has been previously alloted a cart
     return cart_id

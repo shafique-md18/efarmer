@@ -2,7 +2,7 @@ from django.db import models
 import os
 from uuid import uuid4
 from django.db.models.signals import pre_save
-from .utils import unique_slug_generator
+from utils import unique_slug_generator
 from django.urls import reverse
 
 
