@@ -6,7 +6,6 @@ from django.utils.http import is_safe_url
 from .forms import LoginForm, RegistrationForm
 from django.http import HttpResponse
 
-
 def login_page(request):
     form = LoginForm(request.POST or None)
     context = {
@@ -27,6 +26,13 @@ def login_page(request):
             login(request, user)
             # clear the form when the user logs in
             context['form'] = LoginForm()  # empty form
+
+            if request.session.get('cart_id', None):
+                # assign cart_id to the user session
+                user = request.user
+                user_carts = user.cart_set.all()
+                active_user_cart = user_carts.filter(active=True).first()
+                request.session['cart_id'] = active_user_cart.id or None
 
             # redirect user
             if redirect_to and is_safe_url(redirect_to):

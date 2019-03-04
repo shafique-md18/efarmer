@@ -31,15 +31,10 @@ def unique_order_id_generator(instance, new_order_id=None):
     """
     Generate a unique id(uppercase)
     """
-    if new_order_id is not None:
-        order_id = new_order_id
+    new_order_id = random_string_generator(size=10).upper()
     Klass = instance.__class__
     # check if same order_id exists
-    # qs_exists = Klass.objects.filter(order_id=order_id).exists()
-    qs_exists = False
+    qs_exists = Klass.objects.filter(order_id=new_order_id).exists()
     if qs_exists:
-        new_order_id = "{randstr}".format(
-            randstr=random_string_generator(
-                size=10, chars=string.ascii_uppercase + string.digits))
-        return unique_order_id_generator(instance, new_order_id=new_order_id)
+        return unique_order_id_generator(instance)
     return new_order_id

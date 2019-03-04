@@ -47,7 +47,11 @@
                 <td data-th="Subtotal" class="text-center">{{ product.selling_price }}</td>
                 <td class="actions" data-th="">
                     <button class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                    <form action="{% url 'carts:cart_update' %}" method="POST"> {% csrf_token %}
+                        <input type="hidden" value="{{ True }}" name="remove_product">
+                        <input type="hidden" value="{{ product.id }}" name="product_id">
+                        <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}
