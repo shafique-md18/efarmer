@@ -26,14 +26,6 @@ def login_page(request):
             login(request, user)
             # clear the form when the user logs in
             context['form'] = LoginForm()  # empty form
-
-            if request.session.get('cart_id', None):
-                # assign cart_id to the user session
-                user = request.user
-                user_carts = user.cart_set.all()
-                active_user_cart = user_carts.filter(active=True).first()
-                request.session['cart_id'] = active_user_cart.id or None
-
             # redirect user
             if redirect_to and is_safe_url(redirect_to):
                 return redirect(redirect_to)
@@ -55,7 +47,7 @@ def register_page(request):
         user = User.objects.create_user(username, email, password)
         if user is not None:
             user.save()
-            return redirect("home")
+            return redirect("login_page")
         else:
             print("Error creating the user")
     context = {

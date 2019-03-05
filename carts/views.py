@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import Cart
 from products.models import Product
+from orders.models import Order
 
 
 def cart_home(request):
-    cart_obj = Cart.objects.get_or_create_cart(request)
+    cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
     context = {
         "cart_obj": cart_obj,
     }
@@ -20,7 +21,7 @@ def cart_update(request):
         except Product.DoesNotExist:
             print("Error! Product does not exist!")
             return redirect("carts:cart")
-        cart_obj = Cart.objects.new_or_get(request)
+        cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
         print(cart_obj.id)
         if remove_product:
             cart_obj.products.remove(product_obj)
@@ -29,3 +30,14 @@ def cart_update(request):
         request.session['cart_items'] = cart_obj.products.count()
         # return redirect(product_obj.get_absolute_url())
     return redirect("carts:cart")
+
+
+def checkout_home(request):
+    # checkout will be after cart view, ie when cart is created
+    cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
+    if cart_obj.products.count() == 0:
+        # cart is empty redirect to cart view
+        return redirect("carts:cart")
+    order_obj, order_created = Order.objects.get_or_create(cart=cart_obj)
+    print(order_obj)
+    return render(request, "carts/checkout.html", {'object': order_obj})

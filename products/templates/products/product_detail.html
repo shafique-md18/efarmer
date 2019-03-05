@@ -19,9 +19,18 @@
             {{ object.description | linebreaks}} <br />
             <span class="h1 text-danger">Rs. {{ object.selling_price }} /-</span><hr />
             </p> <br>
-            <div>
-                <button class="btn btn-secondary">Add to cart</button>
-                <button class="btn btn-secondary">Checkout</button>
+            <div class="row">
+                <div class="col"
+                <form action="{% url 'carts:cart_update' %}" method="POST">{% csrf_token %}
+                  <input type="hidden" value="{{ object.id }}" name="product_id">
+                  <button class="btn btn-primary" type="submit">
+                      Add to Cart
+                  </button>
+                </form>
+                </div>
+                <div class="col">
+                <a class="btn btn-primary" href="{% url 'carts:cart' %}">View Cart</a>
+                </div>
             </div>
             </div>
         </div>

@@ -36,13 +36,19 @@ class CartManager(models.Manager):
     def get_or_create_cart(self, request):
         cart_id = request.session.get("cart_id", None)
         obj = None
+        new_obj = False
+        # new user with no guest cart
         if cart_id is None:
             obj = Cart()
             obj.active = True
             obj.save()
+            new_obj = True
             request.session['cart_id'] = obj.id
+        # user with guest cart present
         else:
             qs =  self.get_queryset().filter(id=cart_id)
+            qs = qs.filter(active=True)
+            # user already has an active cart
             if qs.count() == 1:
                 obj = qs.first()
                 # if logged in and the guest cart is present
@@ -53,9 +59,17 @@ class CartManager(models.Manager):
                     obj = self.get_queryset().filter(id=cart_id).first()
                     obj.active = True
                     obj.save()
+            # user does not have an active cart
+            elif qs.count() == 0:
+                # get the guest cart
+                obj = self.get_queryset().filter(id=cart_id).first()
+                # user with a guest cart but no user associated cart
+                if request.user.is_authenticated() and obj.user is None:
+                    obj.user = request.user
+                    obj.save()
             else:
-                raise Exception(f'Error while looking up cart via cart_id: {cart_id}')
-        return obj
+                raise Exception(f'Error while looking up cart via cart_id: {cart_id}, {qs.count()}')
+        return obj, new_obj
 
     def new(self, user=None):
         # new empty cart with just user associated

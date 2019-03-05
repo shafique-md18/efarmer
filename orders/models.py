@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from utils import unique_order_id_generator
 from django.db.models.signals import pre_save, post_save
 from carts.models import Cart
+from math import fsum
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -11,9 +12,10 @@ ORDER_STATUS_CHOICES = (
     ('refunded', 'Refunded'),
 )
 
+SHIPPING_COST = 140.00
+
 
 class Order(models.Model):
-    user = models.ForeignKey(User)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
     cart = models.ForeignKey(Cart)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
@@ -27,11 +29,13 @@ class Order(models.Model):
         return self.order_id
 
     def update_total(self):
-        shipping_total = self.shipping_total
-        cart_total = self.cart.total
-        self.order_total = cart_total
-        if cart_total >= 500:
-            self.order_total += shipping_total
+        if self.cart.total < 500:
+            self.shipping_total = SHIPPING_COST
+            # correction for decimal and float addition
+            self.order_total = format(fsum([self.cart.total, self.shipping_total]), '.2f')
+        else:
+            self.shipping_total = 0
+            self.order_total = format(fsum([self.cart.total, self.shipping_total]), '.2f')
         self.save()
         return self.order_total
 
