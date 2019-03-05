@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from utils import unique_order_id_generator
 from django.db.models.signals import pre_save, post_save
 from carts.models import Cart
+from billings.models import BillingProfile
 from math import fsum
 
 ORDER_STATUS_CHOICES = (
@@ -15,15 +16,42 @@ ORDER_STATUS_CHOICES = (
 SHIPPING_COST = 140.00
 
 
+class OrderManager(models.Manager):
+    def get_or_create_order(self, billing_profile, cart_obj):
+        obj = None
+        obj_created = False
+        # get all the incomplete active order of same user with same cart
+        qs = self.get_queryset().filter(
+            billing_profile=billing_profile,
+            cart=cart_obj,
+            active=True)
+        # current order object or previously created object
+        if qs.count() == 1:
+            obj = qs.first()
+        # previously created incomplete objects
+        else:
+            obj = self.model.objects.create(
+                billing_profile=billing_profile,
+                cart=cart_obj
+            )
+            obj_created = True
+        return obj, obj_created
+
+
+
 class Order(models.Model):
+    billing_profile = models.ForeignKey(BillingProfile)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
     cart = models.ForeignKey(Cart)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(default=140.00, decimal_places=2, max_digits=20)
     order_total = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)
+    active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_id
@@ -42,6 +70,7 @@ class Order(models.Model):
 def pre_save_order_receiver(sender, instance, **kwargs):
     if not instance.order_id:
         instance.order_id = unique_order_id_generator(instance)
+    # Issue: might need some extra logic to handle multiple orders of same cart
 
 
 # update total of order if cart changes

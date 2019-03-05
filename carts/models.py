@@ -11,38 +11,38 @@ STATUS = (
 
 
 class CartManager(models.Manager):
-    def new_or_get(self, request):
-        cart_id = request.session.get("cart_id", None)
-        qs = self.get_queryset().filter(id=cart_id)
-        if qs.count() == 1:
-            cart_obj = qs.first()
-            # if logged in and the guest cart is present
-            if request.user.is_authenticated() and cart_obj.user is None:
-                cart_id = self.associate_user_with_cart(request, cart_obj)
-                # cart_id is changed if user has logged in with a guest cart
-                cart_obj = self.get_queryset().filter(id=cart_id).first()
-                cart_obj.active = True
-                cart_obj.save()
-        else:
-            # cart_id is assigned to existing user when he logsin in the accounts app
-            # new user
-            cart_obj = Cart.objects.new(user=request.user)
-            cart_obj.active = True
-            cart_obj.save()
-            request.session['cart_id'] = cart_obj.id
-        return cart_obj
+    # def new_or_get(self, request):
+    #     cart_id = request.session.get("cart_id", None)
+    #     qs = self.get_queryset().filter(id=cart_id)
+    #     if qs.count() == 1:
+    #         cart_obj = qs.first()
+    #         # if logged in and the guest cart is present
+    #         if request.user.is_authenticated() and cart_obj.user is None:
+    #             cart_id = self.associate_user_with_cart(request, cart_obj)
+    #             # cart_id is changed if user has logged in with a guest cart
+    #             cart_obj = self.get_queryset().filter(id=cart_id).first()
+    #             cart_obj.active = True
+    #             cart_obj.save()
+    #     else:
+    #         # cart_id is assigned to existing user when he logsin in the accounts app
+    #         # new user
+    #         cart_obj = Cart.objects.new(user=request.user)
+    #         cart_obj.active = True
+    #         cart_obj.save()
+    #         request.session['cart_id'] = cart_obj.id
+    #     return cart_obj
 
 
     def get_or_create_cart(self, request):
         cart_id = request.session.get("cart_id", None)
         obj = None
-        new_obj = False
+        obj_created = False
         # new user with no guest cart
         if cart_id is None:
             obj = Cart()
             obj.active = True
             obj.save()
-            new_obj = True
+            obj_created = True
             request.session['cart_id'] = obj.id
         # user with guest cart present
         else:
@@ -69,7 +69,7 @@ class CartManager(models.Manager):
                     obj.save()
             else:
                 raise Exception(f'Error while looking up cart via cart_id: {cart_id}, {qs.count()}')
-        return obj, new_obj
+        return obj, obj_created
 
     def new(self, user=None):
         # new empty cart with just user associated

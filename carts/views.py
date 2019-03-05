@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import Cart
 from products.models import Product
 from orders.models import Order
+from billings.models import BillingProfile
 
 
 def cart_home(request):
@@ -33,11 +34,22 @@ def cart_update(request):
 
 
 def checkout_home(request):
-    # checkout will be after cart view, ie when cart is created
-    cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
-    if cart_obj.products.count() == 0:
-        # cart is empty redirect to cart view
-        return redirect("carts:cart")
-    order_obj, order_created = Order.objects.get_or_create(cart=cart_obj)
-    print(order_obj)
-    return render(request, "carts/checkout.html", {'object': order_obj})
+    context = {}
+    if request.user.is_authenticated():
+        # checkout will be after cart view, ie when cart is created
+        cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
+        if cart_obj.products.count() == 0:
+            # cart is empty redirect to cart view
+            return redirect("carts:cart")
+        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(
+            user=request.user, email=request.user.email)
+
+        if billing_profile is not None:
+            order_obj, order_obj_created = Order.objects.get_or_create_order(
+                billing_profile, cart_obj
+            )
+        context = {
+            'object': order_obj,
+            'billing_profile': billing_profile,
+        }
+    return render(request, "carts/checkout.html", context)
