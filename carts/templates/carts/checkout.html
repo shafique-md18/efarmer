@@ -13,14 +13,18 @@
                 <a class="btn btn-danger rounded-0" href="{% url 'register_page' %}?next=/cart/">Register</a>
             </div>
         {% else %}
+
             <h1>Checkout</h1>
             <p>Cart Total: {{ object.cart.total }}</p>
             <p>Shipping Total: {{ object.shipping_total }}</p>
             <p>Order Total: {{ object.order_total }}</p>
             <hr>
-            {{ object.id }} -- {{ object.cart.id }}
-            <hr>
-            {{ billing_profile }}
+
+            
+            <h1>Billing Address</h1>
+                <hr/>
+            {% url "checkout_address_create" as checkout_address_create %}
+            {% include 'addresses/form.html' with form=billing_address_form next_url=request.build_absolute_uri action_url=checkout_address_create address_type='billing' %}
         {% endif %}
     </div>
 {% endblock %}

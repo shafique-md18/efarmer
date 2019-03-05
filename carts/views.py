@@ -3,6 +3,7 @@ from .models import Cart
 from products.models import Product
 from orders.models import Order
 from billings.models import BillingProfile
+from addresses.forms import AddressForm
 
 
 def cart_home(request):
@@ -48,8 +49,14 @@ def checkout_home(request):
             order_obj, order_obj_created = Order.objects.get_or_create_order(
                 billing_profile, cart_obj
             )
+
+        billing_address_form = AddressForm()
+        shipping_address_form = AddressForm()
+
         context = {
             'object': order_obj,
             'billing_profile': billing_profile,
+            'billing_address_form': billing_address_form,
+            'shipping_address_form': shipping_address_form,
         }
     return render(request, "carts/checkout.html", context)
