@@ -1,0 +1,251 @@
+.main-nav-conatainer {
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 23px;
+  font-weight: 400;
+  background: #ffffff;
+  color: #1e1e27;
+}
+
+div {
+  display: block;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  margin-bottom: 0px;
+}
+
+p {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+  color: #51545f;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+  text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+}
+
+.super_container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  z-index: 10;
+  border-bottom: solid 1px black;
+}
+
+.top_nav {
+  visibility: visible;
+  width: 100%;
+  height: 50px;
+  background: #1e1e27;
+  font-size: 13px;
+  line-height: 50px;
+  color: #b5aec4;
+}
+.top_nav .top_nav_left {
+  text-transform: uppercase;
+  margin-left: 0px;
+}
+@media only screen and (max-width: 796px) {
+  .top_nav {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+}
+
+.drop_down {
+  display: inline-block;
+  position: relative;
+  min-width: 50px;
+  padding-left: 20px;
+  text-align: center;
+  vertical-align: middle;
+  background: #1e1e27;
+}
+
+.drop_down > a {
+  display: block;
+  color: #b5aec4;
+  font-weight: 400;
+  height: 50px;
+  line-height: 50px;
+  font-size: 13px;
+}
+
+.drop_down a i {
+  margin-left: 8px;
+}
+
+.drop_down:hover .drop_down_selection {
+  visibility: visible;
+  opacity: 1;
+  top: 100%;
+}
+
+.drop_down_selection {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 120%;
+  margin: 0;
+  width: 100%;
+  background: #ffffff;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+  box-shadow: 0 0 25px rgba(63, 78, 100, 0.1);
+  -webkit-transition: opacity 0.3s ease;
+  -moz-transition: opacity 0.3s ease;
+  -ms-transition: opacity 0.3s ease;
+  -o-transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.drop_down_selection li {
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 50px;
+}
+
+.drop_down_selection li a {
+  display: block;
+  color: #232530;
+  border-bottom: solid 1px #dddddd;
+  font-size: 14px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.drop_down_selection li:hover {
+  background: #db0a5b;
+}
+.drop_down_selection li:hover a {
+  color: #ffffff;
+  border: none;
+}
+
+.drop_down_selection li:last-child a {
+  border-bottom: none;
+}
+
+.drop_down_selection li a i {
+  margin-right: 10px;
+}
+
+.main-nav-container {
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.01);
+  color: #1e1e27;
+  font-size: 14px;
+}
+.main-nav-container .drop_down {
+  background: #ffffff;
+  color: #1e1e27;
+  font-size: 16px;
+}
+.main-nav-container .drop_down a {
+  color: #1e1e27;
+  font-size: 16px;
+}
+
+.navbar-brand {
+  font-family: "Karla", sans-serif;
+  font-weight: 700;
+  font-size: 2em;
+}
+
+.logo-farmer {
+  color: tomato;
+}
+
+.categories h2 {
+  border-bottom: solid 4px tomato;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  padding: 20px;
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.border-bottom-orange {
+  border-bottom: solid 4px tomato;
+}
+
+.newsletter {
+  width: 100%;
+  background: #f2f2f2;
+  margin-top: 100px;
+  margin-bottom: 0px;
+}
+.newsletter .join {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+.newsletter .join-info {
+  color: grey;
+  opacity: 1;
+}
+
+footer {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 100;
+}
+footer ul,
+footer li {
+  padding-left: 0;
+}
+footer .fab {
+  font-size: 20px;
+}
+
+.cc .btn {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.1s linear;
+}
+
+.card:hover > .cc .btn {
+  visibility: visible;
+  opacity: 1;
+}
+
+.card {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+.card .card-title {
+  font-size: 18px;
+}
+.card .card-selling-price {
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=base.css.map */

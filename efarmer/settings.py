@@ -25,7 +25,7 @@ SECRET_KEY = 'u@5l#$e8wwj)z-_(a8(em1694h$pgv4!69)#+ybn8(#79c3%iz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '.ngrok.io']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','.ngrok.io', '.pythonanywhere.com']
 
 
 # Application definition
@@ -136,14 +136,14 @@ USE_TZ = True
 
 # static url used to host files
 STATIC_URL = '/static/'
-
-# directory used to serve the static files by the django static files server
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
-
+# meddia url
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
 
-# local directory to save static files while development
+# directory to serve the static and media files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # this directory will collect all static files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# development static files which are to be collected from
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static_local"),
 ]
