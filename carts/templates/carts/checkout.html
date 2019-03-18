@@ -13,18 +13,37 @@
                 <a class="btn btn-danger rounded-0" href="{% url 'register_page' %}?next=/cart/">Register</a>
             </div>
         {% else %}
+            <form action="" method="POST">
+            <h1 class="mt-3">My Addresses</h1>
+            {% if addresses %}
+                <p><i>Select Shipping Address</i></p>
+                {% for address in addresses %}
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="address_id" id="exampleRadios1" value="{{ address.id }}">
+                      <label class="form-check-label" for="exampleRadios1">
+                        <p>
+                        {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>
+                        {% if address.address_line_2 %}{{ address.address_line_2 }}, <br>{% endif %}
+                        {{ address.city }},<br> {{ address.state }} - {{ address.postal_code }}, <br> {{ address.country }}.<br>
+                        </p><br>
+                      </label>
+                    </div>
+                {% endfor %}
+                <h4>Or..</h4>
+                <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
+            {% else %}
+                <h3>You have no saved address.</h3><br>
+                <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
+            {% endif %}
 
-            <h1>Checkout</h1>
-            <p>Cart Total: {{ object.cart.total }}</p>
-            <p>Shipping Total: {{ object.shipping_total }}</p>
-            <p>Order Total: {{ object.order_total }}</p>
-            <hr>
 
+                <h1 class="mt-3">Order Summary</h1>
+                <p>Cart Total: {{ object.cart.total }}</p>
+                <p>Shipping Total: {{ object.shipping_total }}</p>
+                <p>Order Total: {{ object.order_total }}</p>
+                <hr>
+            </form>
 
-            <h1>Billing Address</h1>
-                <hr/>
-            {% url "checkout_address_create" as checkout_address_create %}
-            {% include 'addresses/form.html' with form=billing_address_form next_url=request.build_absolute_uri action_url=checkout_address_create address_type='billing' %}
         {% endif %}
     </div>
 {% endblock %}

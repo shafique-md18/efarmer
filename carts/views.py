@@ -4,6 +4,8 @@ from products.models import Product
 from orders.models import Order
 from billings.models import BillingProfile
 from addresses.forms import AddressForm
+from addresses.models import Address
+from django.utils.http import is_safe_url
 
 
 def cart_home(request):
@@ -52,11 +54,36 @@ def checkout_home(request):
 
         billing_address_form = AddressForm()
         shipping_address_form = AddressForm()
+        addresses = Address.objects.filter(billing_profile=billing_profile) or None
 
         context = {
             'object': order_obj,
+            'addresses': addresses,
             'billing_profile': billing_profile,
-            'billing_address_form': billing_address_form,
             'shipping_address_form': shipping_address_form,
         }
     return render(request, "carts/checkout.html", context)
+
+
+def checkout_address_create(request):
+    next_ = request.GET.get('next', None)
+    next_post = request.POST.get('next', None)
+    redirect_to = next_ or next_post
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated():
+            print('Form is valid')
+            model_instance = form.save(commit=False)
+            model_instance.address_type = form.cleaned_data.get('address_type') or 'shipping'
+            model_instance.billing_profile = BillingProfile.objects.filter(user=request.user).first()
+            print(model_instance)
+            model_instance.save()
+            if redirect_to and is_safe_url(redirect_to):
+                return redirect(redirect_to)
+            return redirect('home')
+    else:
+        form = AddressForm()
+        context = {
+            'shipping_address_form': form,
+        }
+        return render(request, 'carts/create_address.html', context)

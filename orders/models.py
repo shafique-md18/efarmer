@@ -4,6 +4,7 @@ from utils import unique_order_id_generator
 from django.db.models.signals import pre_save, post_save
 from carts.models import Cart
 from billings.models import BillingProfile
+from addresses.models import Address
 from math import fsum
 
 ORDER_STATUS_CHOICES = (
@@ -11,6 +12,10 @@ ORDER_STATUS_CHOICES = (
     ('paid', 'Paid'),
     ('shipped', 'Shipped'),
     ('refunded', 'Refunded'),
+)
+
+ORDER_PAYMENT_METHODS = (
+    ('cash_on_delivery', 'Cash On Delivery'),
 )
 
 SHIPPING_COST = 140.00
@@ -41,11 +46,13 @@ class OrderManager(models.Manager):
 
 class Order(models.Model):
     billing_profile = models.ForeignKey(BillingProfile)
+    shipping_address = models.ForeignKey(Address, blank=True, null=True)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
     cart = models.ForeignKey(Cart)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(default=140.00, decimal_places=2, max_digits=20)
     order_total = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)
+    payment_method = models.CharField(max_length=120, default='cash_on_delivery', choices=ORDER_PAYMENT_METHODS)
     active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
