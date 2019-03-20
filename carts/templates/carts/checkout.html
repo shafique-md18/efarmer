@@ -13,13 +13,19 @@
                 <a class="btn btn-danger rounded-0" href="{% url 'register_page' %}?next=/cart/">Register</a>
             </div>
         {% else %}
-            <form action="" method="POST">
-            <h1 class="mt-3">My Addresses</h1>
-            {% if addresses %}
+            <div class="mt-3">
+            {% include 'carts/cart_summary.html' with num_cart_items=num_cart_items products=object.cart.products.all shipping=object.shipping_total total=object.order_total %}
+            </div>
+
+            <form action="{% url 'carts:create_order' %}" method="POST"> {% csrf_token %}
+            <h4 class="mt-3"><span class="text-bold">My Addresses</span></h4>
+              <div class="form-group">
+                {% if addresses %}
                 <p><i>Select Shipping Address</i></p>
                 {% for address in addresses %}
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="address_id" id="exampleRadios1" value="{{ address.id }}">
+                      <input class="form-check-input" type="radio"
+                             name="shipping_address" value="{{ address }}">
                       <label class="form-check-label" for="exampleRadios1">
                         <p>
                         {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>
@@ -31,18 +37,44 @@
                 {% endfor %}
                 <h4>Or..</h4>
                 <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
-            {% else %}
-                <h3>You have no saved address.</h3><br>
-                <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
-            {% endif %}
-
-
-                <h1 class="mt-3">Order Summary</h1>
-                <p>Cart Total: {{ object.cart.total }}</p>
-                <p>Shipping Total: {{ object.shipping_total }}</p>
-                <p>Order Total: {{ object.order_total }}</p>
+                {% else %}
+                    <h3>You have no saved address.</h3><br>
+                    <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
+                {% endif %}
                 <hr>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input"
+                       name="payment_method" value="cash_on_delivery">
+                <label class="form-check-label" for="exampleCheck1">Cash On Delivery</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Place Order</button>
             </form>
+
+{#            <form action="" method="POST">#}
+{#            {% if addresses %}#}
+{#                <p><i>Select Shipping Address</i></p>#}
+{#                {% for address in addresses %}#}
+{#                    <div class="form-check">#}
+{#                      <input class="form-check-input" type="radio" name="address_id" id="exampleRadios1" value="{{ address.id }}">#}
+{#                      <label class="form-check-label" for="exampleRadios1">#}
+{#                        <p>#}
+{#                        {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>#}
+{#                        {% if address.address_line_2 %}{{ address.address_line_2 }}, <br>{% endif %}#}
+{#                        {{ address.city }},<br> {{ address.state }} - {{ address.postal_code }}, <br> {{ address.country }}.<br>#}
+{#                        </p><br>#}
+{#                      </label>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#                <h4>Or..</h4>#}
+{#                <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>#}
+{#            {% else %}#}
+{#                <h3>You have no saved address.</h3><br>#}
+{#                <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>#}
+{#            {% endif %}#}
+{#            <hr>#}
+{##}
+{#            </form>#}
 
         {% endif %}
     </div>

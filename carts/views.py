@@ -4,8 +4,10 @@ from products.models import Product
 from orders.models import Order
 from billings.models import BillingProfile
 from addresses.forms import AddressForm
+from orders.forms import OrderForm
 from addresses.models import Address
 from django.utils.http import is_safe_url
+from django.http import Http404
 
 
 def cart_home(request):
@@ -51,13 +53,13 @@ def checkout_home(request):
             order_obj, order_obj_created = Order.objects.get_or_create_order(
                 billing_profile, cart_obj
             )
-
-        billing_address_form = AddressForm()
+        num_cart_items = order_obj.cart.products.count()
         shipping_address_form = AddressForm()
         addresses = Address.objects.filter(billing_profile=billing_profile) or None
 
         context = {
             'object': order_obj,
+            'num_cart_items': num_cart_items,
             'addresses': addresses,
             'billing_profile': billing_profile,
             'shipping_address_form': shipping_address_form,
@@ -72,11 +74,9 @@ def checkout_address_create(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid() and request.user.is_authenticated():
-            print('Form is valid')
             model_instance = form.save(commit=False)
             model_instance.address_type = form.cleaned_data.get('address_type') or 'shipping'
             model_instance.billing_profile = BillingProfile.objects.filter(user=request.user).first()
-            print(model_instance)
             model_instance.save()
             if redirect_to and is_safe_url(redirect_to):
                 return redirect(redirect_to)
@@ -87,3 +87,23 @@ def checkout_address_create(request):
             'shipping_address_form': form,
         }
         return render(request, 'carts/create_address.html', context)
+
+
+def create_order(request):
+    if not request.user.is_authenticated() or Order.objects.filter(
+            billing_profile=BillingProfile.objects.filter(user=request.user), active=True).count() != 1 or Cart.objects.filter(
+            user=request.user, active=True).count() != 1:
+        return Http404('Error occured while placing the order!')
+    if request.method == 'POST':
+        form = request.POST
+        model_instance = Order.objects.get_active_order(
+            billing_profile=BillingProfile.objects.filter(user=request.user),
+            cart=Cart.objects.filter(user=request.user, active=True))
+        print(model_instance)
+        model_instance.shipping_address = form.shipping_address
+        model_instance.payment_method = form.cleaned_data.get('payment_method')
+        print(form.shipping_address)
+        model_instance.save()
+        print(model_instance)
+        return render(request, 'home', {})
+    return redirect('home')

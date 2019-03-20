@@ -9,6 +9,7 @@ from math import fsum
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
+    ('placed', 'Placed'),
     ('paid', 'Paid'),
     ('shipped', 'Shipped'),
     ('refunded', 'Refunded'),
@@ -23,7 +24,6 @@ SHIPPING_COST = 140.00
 
 class OrderManager(models.Manager):
     def get_or_create_order(self, billing_profile, cart_obj):
-        obj = None
         obj_created = False
         # get all the incomplete active order of same user with same cart
         qs = self.get_queryset().filter(
@@ -41,6 +41,13 @@ class OrderManager(models.Manager):
             )
             obj_created = True
         return obj, obj_created
+
+    def get_active_order(self, billing_profile, cart):
+        qs = qs = self.get_queryset().filter(
+            billing_profile=billing_profile,
+            cart=cart,
+            active=True)
+        return qs.first() or None
 
 
 
