@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}
+    E-Farmer | My Account | Profile | Orders
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="display-5 font-weight-light text-danger my-3">My Account</h1>
+        <form>
+        <div class="form-group row">
+        <label for="username" class="col-sm-2 col-form-label">Username</label>
+        <div class="col-sm-10">
+        <input type="text" class="form-control" id="username" placeholder="{{ request.user.username }}" disabled>
+        </div>
+        </div>
+        <div class="form-group row">
+        <label for="username" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+        <input type="email" class="form-control" id="email" placeholder="{{ request.user.email }}" disabled>
+        </div>
+        </div>
+        </form>
+        <hr>
+        <h1 class="display-5 font-weight-light text-danger my-3">My Addresses</h1>
+            {% if addresses.count == 0 %}
+                <h3>You have no saved address.</h3><br>
+            {% else %}
+                    <table class="table">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Address</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for address in addresses %}
+                        <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
+                          <td>
+                        {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>
+                        {% if address.address_line_2 %}{{ address.address_line_2 }}, <br>{% endif %}
+                        {{ address.city }},<br> {{ address.state }} - {{ address.postal_code }}, <br> {{ address.country }}.<br>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+            {% endif %}
+            <a class="btn btn-primary rounded-0" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
+            <hr>
+        <h1 class="display-5 font-weight-light text-danger my-3">My Orders</h1>
+        {% if orders.count == 0 %}
+                <h3>You have not placed any order yet.</h3><br>
+                <a href="{% url 'home' %}" class="btn-lg rounded-0 btn-square btn-success mt-2 float-right">
+                    Shop Now
+                </a>
+            {% else %}
+                <table class="table">
+                      <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Items</th>
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Order Total</th>
+                            <th scope="col">Payment Method</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for order in orders %}
+                        <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
+                          <td>
+                              {{ order.order_id }}
+                          </td>
+                            <td>
+                                {% for item in order.cart.products.all %}
+                                    {{ item.name }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {{ order.get_status_display }}
+                            </td>
+                            <td>
+                                {{ order.order_total }}
+                            </td>
+                            <td>
+                                {{ order.get_payment_method_display }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+            {% endif %}
+    </div>
+{% endblock %}

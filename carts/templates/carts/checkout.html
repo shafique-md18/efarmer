@@ -18,15 +18,15 @@
             </div>
 
             <form action="{% url 'carts:create_order' %}" method="POST"> {% csrf_token %}
-            <h4 class="mt-3"><span class="text-bold">My Addresses</span></h4>
+            <h1 class="display-5 font-weight-light text-danger my-3">My Addresses</h1>
               <div class="form-group">
                 {% if addresses %}
                 <p><i>Select Shipping Address</i></p>
                 {% for address in addresses %}
                     <div class="form-check">
                       <input class="form-check-input" type="radio"
-                             name="shipping_address" value="{{ address }}">
-                      <label class="form-check-label" for="exampleRadios1">
+                             name="shipping_address" value="{{ address.id }}">
+                      <label class="form-check-label" for="shipping_address">
                         <p>
                         {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>
                         {% if address.address_line_2 %}{{ address.address_line_2 }}, <br>{% endif %}
@@ -38,17 +38,20 @@
                 <h4>Or..</h4>
                 <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
                 {% else %}
-                    <h3>You have no saved address.</h3><br>
+                    <h4 class="font-weight-normal">You have no saved address.</h4><br>
                     <a class="btn btn-info text-light" href="{% url 'carts:checkout_address_create' %}">Create New Address</a>
                 {% endif %}
                 <hr>
               </div>
+                <h1 class="display-5 font-weight-light text-danger my-3">Payment Method</h1>
               <div class="form-check">
-                <input type="checkbox" class="form-check-input"
-                       name="payment_method" value="cash_on_delivery">
-                <label class="form-check-label" for="exampleCheck1">Cash On Delivery</label>
+{#                <input type="checkbox" class="form-check-input"#}
+{#                       name="payment_method" value="cash_on_delivery" checked readonly="readonly">#}
+                <select class="custom-select my-3" name="payment_method">
+                  <option value="cash_on_delivery" selected readonly="readonly">Cash On delivery</option>
+                </select>
               </div>
-              <button type="submit" class="btn btn-primary">Place Order</button>
+              <button type="submit" class="btn-lg rounded-0 btn-square btn-success mt-2 float-right">Place Order</button>
             </form>
 
 {#            <form action="" method="POST">#}

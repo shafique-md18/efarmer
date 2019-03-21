@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+    E-Farmer | Order Successful
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <div class="jumbotron text-xs-center mt-4">
+    <h1 class="display-3">Thank You For Placing Order!</h1>
+    <p class="lead">Please Note Your Order ID for future reference: <strong>{{ order_id }}</strong></p>
+    <hr>
+    <p>
+    Having trouble? <a href="{% url 'contact' %}">Contact us</a>
+    </p>
+    <p class="lead">
+    <a class="btn btn-primary btn-sm" href="{% url 'home' %}" role="button">Continue to homepage</a>
+    </p>
+    </div>
+    </div>
+
+{% endblock %}

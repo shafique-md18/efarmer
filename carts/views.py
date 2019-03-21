@@ -7,7 +7,7 @@ from addresses.forms import AddressForm
 from orders.forms import OrderForm
 from addresses.models import Address
 from django.utils.http import is_safe_url
-from django.http import Http404
+from django.http import HttpResponseBadRequest
 
 
 def cart_home(request):
@@ -55,7 +55,7 @@ def checkout_home(request):
             )
         num_cart_items = order_obj.cart.products.count()
         shipping_address_form = AddressForm()
-        addresses = Address.objects.filter(billing_profile=billing_profile) or None
+        addresses = Address.objects.filter(billing_profile=billing_profile)
 
         context = {
             'object': order_obj,
@@ -90,20 +90,32 @@ def checkout_address_create(request):
 
 
 def create_order(request):
-    if not request.user.is_authenticated() or Order.objects.filter(
-            billing_profile=BillingProfile.objects.filter(user=request.user), active=True).count() != 1 or Cart.objects.filter(
-            user=request.user, active=True).count() != 1:
-        return Http404('Error occured while placing the order!')
+    billing_profile = BillingProfile.objects.filter(user=request.user)
+    cart = Cart.objects.filter(user=request.user, active=True)
+
     if request.method == 'POST':
-        form = request.POST
+        if not request.user.is_authenticated() or Order.objects.filter(
+                billing_profile=billing_profile, active=True).count() != 1 or cart.count() != 1:
+            return HttpResponseBadRequest('Error occurred while placing the order!')
+
         model_instance = Order.objects.get_active_order(
-            billing_profile=BillingProfile.objects.filter(user=request.user),
-            cart=Cart.objects.filter(user=request.user, active=True))
-        print(model_instance)
-        model_instance.shipping_address = form.shipping_address
-        model_instance.payment_method = form.cleaned_data.get('payment_method')
-        print(form.shipping_address)
-        model_instance.save()
-        print(model_instance)
-        return render(request, 'home', {})
+            billing_profile=billing_profile, cart=cart)
+        form = OrderForm(request.POST, instance=model_instance)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            model_instance.shipping_address = form.cleaned_data.get('shipping_address')
+            model_instance.payment_method = form.cleaned_data.get('payment_method')
+            # change order status to placed
+            model_instance.status = 'placed'
+            # make order and cart inactive for placing next order
+            model_instance.active = False
+            print(Cart.objects.change_cart_status(model_instance.cart.id, False))
+            model_instance.save()
+            print(model_instance.cart.active)
+            form.save()
+            context = {
+                'order_id': model_instance.order_id,
+            }
+            return render(request, "carts/order_success.html", context)
     return redirect('home')

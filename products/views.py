@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from .models import Product, Category
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+import random
 
 
 class ProductCategoryListView(ListView):
@@ -19,7 +20,6 @@ class ProductCategoryListView(ListView):
         context = super(ProductCategoryListView, self).get_context_data(**kwargs)
         category = Category.objects.get(slug__iexact=slug)
         context['category'] = category.name.capitalize()
-        print(context)
         return context
 
     def get_queryset(self, **kwargs):
@@ -32,7 +32,9 @@ class ProductCategoryListView(ListView):
             raise Http404("Category does not exist!")
         except:
             raise Http404("Something terrible has happened!")
-        return Product.objects.filter(category__slug__iexact=slug)
+        products = Product.objects.filter(category__slug__iexact=slug, stock__gt=0).order_by('?')
+        # return random sample of products - NOT EFFICIENT
+        return products
 
 
 class ProductDetailView(DetailView):

@@ -1,48 +1,3 @@
-{#{% load static %}#}
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#  <head>#}
-{#    <!-- Required meta tags -->#}
-{#    <meta charset="utf-8" />#}
-{#    <meta#}
-{#      name="viewport"#}
-{#      content="width=device-width, initial-scale=1, shrink-to-fit=no"#}
-{#    />#}
-{##}
-{#    <!-- Bootstrap CSS -->#}
-{#    <link#}
-{#      rel="stylesheet"#}
-{#      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"#}
-{#      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"#}
-{#      crossorigin="anonymous"#}
-{#    />#}
-{#    <link rel="stylesheet" href="{% static '/css/base.css' %}">#}
-{#    <title>{% block title %}{% endblock title %}</title>#}
-{#  </head>#}
-{#  <body>#}
-{#    {% include 'products/snippets/navbar.html' with categories=categories %} #}
-{#    {% block content %} {% endblock content %}#}
-{##}
-{#    <!-- Optional JavaScript -->#}
-{#    <!-- jQuery first, then Popper.js, then Bootstrap JS -->#}
-{#    <script#}
-{#      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
-{#      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
-{#      crossorigin="anonymous"#}
-{#    ></script>#}
-{#    <script#}
-{#      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"#}
-{#      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"#}
-{#      crossorigin="anonymous"#}
-{#    ></script>#}
-{#    <script#}
-{#      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"#}
-{#      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"#}
-{#      crossorigin="anonymous"#}
-{#    ></script>#}
-{#  </body>#}
-{#</html>#}
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -158,40 +113,21 @@
                         <i class="fa fa-angle-down"></i>
                       </a>
                       <ul class="drop_down_selection text-left text-capitalize">
-                        <li>
-                          <a href="#"> horticulture seeds</a>
-                        </li>
-                        <li>
-                          <a href="#">field crops</a>
-                        </li>
-                        <li>
-                          <a href="#">forage seeds</a>
-                        </li>
-                        <li>
-                          <a href="#">field crops</a>
-                        </li>
-                        <li>
-                          <a href="#">plant nutrients</a>
-                        </li>
-                        <li>
-                          <a href="#">pesticides</a>
-                        </li>
-                        <li>
-                          <a href="#">tools and instruments</a>
-                        </li>
-                        <li>
-                          <a href="#">urban garden seeds</a>
-                        </li>
+                        {% for category in categories %}
+                            <li>
+                                <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
                       </ul>
                     </li>
                     <li class="drop_down text-uppercase">
-                      <a href="#">contact</a>
+                      <a href="{% url 'contact' %}">contact</a>
                     </li>
                     <li class="drop_down">
                       <a href="{% url 'search:query' %}"><i class="fas fa-search"></i></a>
                     </li>
                     <li class="drop_down">
-                      <a href="#"><i class="fas fa-user-alt"></i></a>
+                      <a href="{% url 'my_account' %}"><i class="fas fa-user-alt"></i></a>
                     </li>
                     <li class="drop_down">
                       <a href="{% url 'carts:cart' %}"><i class="fas fa-shopping-cart"></i></a>

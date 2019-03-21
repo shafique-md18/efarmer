@@ -1,6 +1,7 @@
 from django.utils.text import slugify
 import random
 import string
+import functools
 
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
@@ -38,3 +39,14 @@ def unique_order_id_generator(instance, new_order_id=None):
     if qs_exists:
         return unique_order_id_generator(instance)
     return new_order_id
+
+
+def memoize(method):
+    @functools.wraps(method)
+    def memoizer(*args, **kwargs):
+        method._cache = getattr(method, '_cache', {})
+        key = args
+        if key not in method._cache:
+            method._cache[key] = method(*args, **kwargs)
+        return method._cache[key]
+    return memoizer

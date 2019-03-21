@@ -25,3 +25,6 @@ class Address(models.Model):
 
     def __str__(self):
         return f'{self.billing_profile.email} - {self.id}'
+
+    def get_name(self):
+        return self.__str__()

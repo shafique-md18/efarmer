@@ -12,6 +12,7 @@ ORDER_STATUS_CHOICES = (
     ('placed', 'Placed'),
     ('paid', 'Paid'),
     ('shipped', 'Shipped'),
+    ('cancelled', 'Cancelled'),
     ('refunded', 'Refunded'),
 )
 
@@ -43,7 +44,7 @@ class OrderManager(models.Manager):
         return obj, obj_created
 
     def get_active_order(self, billing_profile, cart):
-        qs = qs = self.get_queryset().filter(
+        qs = self.get_queryset().filter(
             billing_profile=billing_profile,
             cart=cart,
             active=True)
@@ -67,8 +68,26 @@ class Order(models.Model):
 
     objects = OrderManager()
 
+
+    def __init__(self, *args, **kwargs):
+        super(Order, self).__init__(*args, **kwargs)
+        self.old_status = self.status
+
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     # when status changes from created to places
+    #     # decrement stock of the products
+    #     if self.old_status == 'created' and self.status == 'placed':
+    #         for product in self.cart.products:
+    #             product.decrement_stock()
+    #     # if product is cancelled increment stock
+    #     if self.status == 'cancelled':
+    #         for product in self.cart.products:
+    #             product.increment_stock()
+
     def __str__(self):
         return self.order_id
+
 
     def update_total(self):
         if self.cart.total < 500:
@@ -84,7 +103,6 @@ class Order(models.Model):
 def pre_save_order_receiver(sender, instance, **kwargs):
     if not instance.order_id:
         instance.order_id = unique_order_id_generator(instance)
-    # Issue: might need some extra logic to handle multiple orders of same cart
 
 
 # update total of order if cart changes
@@ -99,6 +117,26 @@ def post_save_cart_total_receiver(sender, instance, **kwargs):
 def post_save_order_created(sender, instance, created, **kwargs):
     if created:
         instance.update_total()
+    if instance.old_status == 'created' and instance.status == 'placed':
+        # when status changes from created to places
+        # decrement stock of the products
+        if instance.old_status == 'created' and instance.status == 'placed':
+            for product in instance.cart.products.all():
+                product.decrement_stock()
+                product.save()
+            instance.old_status = 'placed'
+            # for adding orders in the admin
+            instance.cart.active = False
+            instance.cart.save()
+            instance.active = False
+            instance.save()
+
+    # if product is cancelled increment stock
+    if instance.old_status == 'placed' and instance.status == 'cancelled':
+        for product in instance.cart.products.all():
+            product.increment_stock()
+            product.save()
+            instance.old_status = 'cancelled'
 
 
 pre_save.connect(pre_save_order_receiver, Order)

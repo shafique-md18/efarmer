@@ -4,18 +4,9 @@
 {% endblock %}
 
 {% block content %}
-{#    <div class="container">#}
-{#    <h1 class="display-4 text-danger my-3">My Cart</h1>#}
-{#    <ul>#}
-{#    {% for co in cart_obj.products.all %}#}
-{#        <li><p>{{ co.name }} | {{ co.selling_price }}</p></li>#}
-{#    {% endfor %}#}
-{#    <h5>{{ cart_obj.total }}</h5>#}
-{#    </ul>#}
-{#    </div>#}
 
     <div class="container">
-        <h1 class="display-4 text-danger my-3">My Cart</h1>
+        <h1 class="display-5 font-weight-light text-danger my-3">My Cart</h1>
 	<table id="cart" class="table table-hover table-condensed">
         <thead>
             <tr>
@@ -23,7 +14,7 @@
                 <th style="width:10%">Price</th>
                 <th style="width:8%">Quantity</th>
                 <th style="width:22%" class="text-center">Subtotal</th>
-                <th style="width:15%"></th>
+                <th style="width:15%">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -42,11 +33,10 @@
                 </td>
                 <td data-th="Price">₹{{ product.selling_price }}</td>
                 <td data-th="Quantity">
-                    <input type="number" class="form-control text-center" value="1">
+                    <input type="number" class="form-control text-center" value="1" disabled>
                 </td>
-                <td data-th="Subtotal" class="text-center">{{ product.selling_price }}</td>
+                <td data-th="Subtotal" class="text-center">₹{{ product.selling_price }}</td>
                 <td class="actions" data-th="">
-                    <button class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button>
                     <form action="{% url 'carts:cart_update' %}" method="POST"> {% csrf_token %}
                         <input type="hidden" value="{{ True }}" name="remove_product">
                         <input type="hidden" value="{{ product.id }}" name="product_id">
@@ -64,7 +54,10 @@
                 <td><a href="{% url 'home' %}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
                 <td colspan="2" class="hidden-xs"></td>
                 <td class="hidden-xs text-center"><strong>Total {{ cart_obj.total }}</strong></td>
-                <td><a href="{% url 'carts:checkout' %}" class="btn btn-success mx-auto">Checkout <i class="fas fa-angle-right"></i></a></td>
+                {% if cart_obj is not None and cart_obj.products.all.count != 0 %}
+                    <td><a href="{% url 'carts:checkout' %}" class="btn btn-success mx-auto">Checkout <i class="fas fa-angle-right"></i></a></td>
+                {% endif %}
+
             </tr>
         </tfoot>
     </table>

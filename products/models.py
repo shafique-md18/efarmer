@@ -72,6 +72,7 @@ class ProductManager(models.Manager):
         return self.get_queryset().search(query)
 
 
+
 class Product(models.Model):
     name = models.CharField('Product Name', max_length=120)
     brand = models.CharField('Brand', default="", max_length=120)
@@ -112,6 +113,13 @@ class Product(models.Model):
 
     def is_available(self):
         return self.stock > 0
+
+    def increment_stock(self):
+        self.stock += 1
+
+    def decrement_stock(self):
+        if self.stock > 0:
+            self.stock -= 1
 
     def __str__(self):
         return self.name
