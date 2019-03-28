@@ -138,20 +138,20 @@ class CartManager(models.Manager):
         # check if user already has a cart alloted in db
         user = request.user
         user_carts = user.cart_set.all()
-        active_user_cart = user_carts.filter(active=True)
+        active_user_carts = user_carts.filter(active=True)
         cart_id = cart_obj.id
-        if active_user_cart.count() == 1 :
+        if active_user_carts.count() == 1 :
             # user already has a cart in db and the guest cart has atleast 1
             # product, copy the guest cart in the user cart
             if cart_obj.products.count() > 0:
                 for product in cart_obj.products.all():
-                    if product not in active_user_cart.products.all():
-                        active_user_cart.products.add(product)
-                active_user_cart.save()
+                    if product not in active_user_carts.first().products.all():
+                        active_user_carts.first().products.add(product)
+                active_user_carts.first().save()
             # delete the guest cart
             cart_obj.delete()
-            cart_id = active_user_cart.id
-        elif active_user_cart.count() > 1:
+            cart_id = active_user_carts.first().id
+        elif active_user_carts.count() > 1:
             raise Exception("More than one active carts for the user")
         else:
             # user has no carts
