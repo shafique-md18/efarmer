@@ -62,6 +62,7 @@ class CartManager(models.Manager):
         guest_cart_id = request.session.get("cart_id", None)
         guest_cart = None
         if guest_cart_id is not None:
+            # guest_cart_id is valid
             guest_cart = self.model.objects.filter(id=guest_cart_id, active=True).first()
         # for authenticated users
         object = None
@@ -72,24 +73,24 @@ class CartManager(models.Manager):
             if qs.count() == 1:
                 object = qs.first()
                 if guest_cart is not None and guest_cart.user is None:
+                    # user has cart and guest cart exists
                     cart_id = self.associate_user_with_cart(request, guest_cart)
+                    # maybe local(object) does not change ? BUG
+                    object = self.model.objects.filter(id=cart_id, active=True).first()
                     request.session['cart_id'] = cart_id
                 else:
+                    # user has a cart and guest cart doesn't exist
+                    # object -> user cart, object_created -> false
                     pass
             elif qs.count() > 1:
                 raise Exception("User has more than one active carts!")
             else:
                 # user does not have a cart allocated to him, but guest cart exists
                 if guest_cart is not None and guest_cart.user is None:
-                    object = self.model.objects.filter(id=guest_cart_id).first()
-                    if object is not None:
-                        # guest_cart_id is valid
-                        object.user = request.user
-                        object.save()
-                    else:
-                        # guest_cart_id is invalid
-                        object = self.new(active=True, user=request.user)
-                        object_created = True
+                    object = guest_cart
+                    # map user
+                    object.user = request.user
+                    object.save()
                 else:
                     # user does not have a cart allocated to him and guest cart doesnt exist
                     object = self.new(active=True, user=request.user)
@@ -127,8 +128,8 @@ class CartManager(models.Manager):
 
     def associate_user_with_cart(self, request, cart_obj):
         """
-        copies cart_obj to the request.user cart,
         sets cart_obj.user to request.user if request.user doesnt have any active cart
+        copies cart_obj to the request.user cart and delete cart_obj, otherwise
         :param request:
         :param cart_obj:
         :return: cart_id
@@ -137,20 +138,20 @@ class CartManager(models.Manager):
         # check if user already has a cart alloted in db
         user = request.user
         user_carts = user.cart_set.all()
-        active_user_carts = user_carts.filter(active=True)
+        active_user_cart = user_carts.filter(active=True)
         cart_id = cart_obj.id
-        if active_user_carts.count() == 1 :
+        if active_user_cart.count() == 1 :
             # user already has a cart in db and the guest cart has atleast 1
             # product, copy the guest cart in the user cart
             if cart_obj.products.count() > 0:
                 for product in cart_obj.products.all():
-                    if product not in user_carts.first().products.all():
-                        user_carts.first().products.add(product)
-                user_carts.first().save()
+                    if product not in active_user_cart.products.all():
+                        active_user_cart.products.add(product)
+                active_user_cart.save()
             # delete the guest cart
             cart_obj.delete()
-            cart_id = user_carts.first().id
-        elif active_user_carts.count() > 1:
+            cart_id = active_user_cart.id
+        elif active_user_cart.count() > 1:
             raise Exception("More than one active carts for the user")
         else:
             # user has no carts
