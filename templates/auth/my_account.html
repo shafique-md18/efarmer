@@ -40,7 +40,7 @@
                           <td>
                         {{ address.full_name }}, <br> {{ address.address_line_1 }}, <br>
                         {% if address.address_line_2 %}{{ address.address_line_2 }}, <br>{% endif %}
-                        {{ address.city }},<br> {{ address.state }} - {{ address.postal_code }}, <br> {{ address.country }}.<br>
+                        {{ address.city }},<br> {{ address.state }} - {{ address.postal_code }}, <br> {{ address.get_country_display }}.<br>
                           </td>
                         </tr>
                         {% endfor %}

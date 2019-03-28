@@ -18,7 +18,7 @@ class Address(models.Model):
     address_line_1 = models.CharField(max_length=120)
     address_line_2 = models.CharField(max_length=120, null=True, blank=True)
     city = models.CharField(max_length=20)
-    country = models.CharField(max_length=20, default='India', choices=COUNTRIES)
+    country = models.CharField(max_length=20, default='india', choices=COUNTRIES)
     state = models.CharField(max_length=20)
     postal_code = models.CharField(max_length=20)
 
