@@ -1,6 +1,6 @@
-Django==1.11.23
-django-crispy-forms==1.7.2
-Pillow==6.2.0
-pytz==2018.9
+Django==1.11.*
+django-crispy-forms==1.9.1
+Pillow==7.1.2
+pytz==2020.1
 selenium==3.141.0
-urllib3==1.24.1
+urllib3==1.25.9
