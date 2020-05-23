@@ -1,34 +1,18 @@
-"""efarmer URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf import settings
 from django.conf.urls.static import static
-
-from django.conf.urls import include, url
+from django.urls import re_path, path, include
 from django.contrib import admin
 from . import views
 
 
 urlpatterns = [
-    url(r'^$', views.home_page, name='home'),
-    url(r'^admin/', admin.site.urls),
-    url(r'^contact/$', views.contact_page, name='contact'),
-    url(r'^accounts/', include('accounts.urls')),
-    url(r'^products/', include('products.urls', namespace='products')),
-    url(r'^search/', include('search.urls', namespace='search')),
-    url(r'^cart/', include('carts.urls', namespace='carts')),
+    re_path(r'^$', views.home_page, name='home'),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^contact/$', views.contact_page, name='contact'),
+    re_path(r'^accounts/', include('accounts.urls')),
+    re_path(r'^products/', include('products.urls')),
+    re_path(r'^search/', include('search.urls')),
+    re_path(r'^cart/', include('carts.urls'))
 ]
 
 # serve the static files in development env.

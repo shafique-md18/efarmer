@@ -40,7 +40,7 @@ def cart_update(request):
 
 def checkout_home(request):
     context = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # checkout will be after cart view, ie when cart is created
         cart_obj, cart_created = Cart.objects.get_or_create_cart(request)
         if cart_obj.products.count() == 0:
@@ -73,12 +73,14 @@ def checkout_address_create(request):
     redirect_to = next_ or next_post
     if request.method == 'POST':
         form = AddressForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated():
+        if form.is_valid() and request.user.is_authenticated:
             model_instance = form.save(commit=False)
             model_instance.address_type = form.cleaned_data.get('address_type') or 'shipping'
             model_instance.billing_profile = BillingProfile.objects.filter(user=request.user).first()
             model_instance.save()
-            if redirect_to and is_safe_url(redirect_to):
+            if redirect_to and is_safe_url(redirect_to, 
+                    allowed_hosts=request.get_host(),
+                    require_https=request.is_secure()):
                 return redirect(redirect_to)
             return redirect('home')
     else:
@@ -90,19 +92,17 @@ def checkout_address_create(request):
 
 
 def create_order(request):
-    billing_profile = BillingProfile.objects.filter(user=request.user)
-    cart = Cart.objects.filter(user=request.user, active=True)
+    billing_profile = BillingProfile.objects.filter(user=request.user).first()
+    cart = Cart.objects.filter(user=request.user, active=True).first()
 
     if request.method == 'POST':
-        if not request.user.is_authenticated() or Order.objects.filter(
-                billing_profile=billing_profile, active=True).count() != 1 or cart.count() != 1:
+        if not request.user.is_authenticated or Order.objects.filter(
+                billing_profile=billing_profile, active=True).first() is None or cart is None:
             return HttpResponseBadRequest('Error occurred while placing the order!')
 
         model_instance = Order.objects.get_active_order(
             billing_profile=billing_profile, cart=cart)
         form = OrderForm(request.POST, instance=model_instance)
-        print(form)
-        print(form.is_valid())
         if form.is_valid():
             model_instance.shipping_address = form.cleaned_data.get('shipping_address')
             model_instance.payment_method = form.cleaned_data.get('payment_method')
@@ -110,9 +110,7 @@ def create_order(request):
             model_instance.status = 'placed'
             # make order and cart inactive for placing next order
             model_instance.active = False
-            print(Cart.objects.change_cart_status(model_instance.cart.id, False))
             model_instance.save()
-            print(model_instance.cart.active)
             form.save()
             context = {
                 'order_id': model_instance.order_id,

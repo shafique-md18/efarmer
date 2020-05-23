@@ -53,10 +53,10 @@ class OrderManager(models.Manager):
 
 
 class Order(models.Model):
-    billing_profile = models.ForeignKey(BillingProfile)
-    shipping_address = models.ForeignKey(Address, blank=True, null=True)
+    billing_profile = models.ForeignKey(BillingProfile, on_delete=models.SET_NULL, null=True)
+    shipping_address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
-    cart = models.ForeignKey(Cart)
+    cart = models.ForeignKey(Cart, on_delete=models.PROTECT)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(default=140.00, decimal_places=2, max_digits=20)
     order_total = models.DecimalField(default=0.00, decimal_places=2, max_digits=20)

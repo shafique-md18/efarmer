@@ -31,7 +31,7 @@ class CartManager(models.Manager):
             if qs.count() == 1:
                 obj = qs.first()
                 # if logged in and the guest cart is present
-                if request.user.is_authenticated() and obj.user is None:
+                if request.user.is_authenticated and obj.user is None:
                     cart_id = self.associate_user_with_cart(request, obj)
                     # cart_id is changed if user has logged in with a guest cart
                     request.session['cart_id'] = cart_id
@@ -43,7 +43,7 @@ class CartManager(models.Manager):
                 # get the guest cart
                 obj = self.get_queryset().filter(id=cart_id).first()
                 # user with a guest cart but no user associated cart
-                if request.user.is_authenticated() and obj.user is None:
+                if request.user.is_authenticated and obj.user is None:
                     obj.user = request.user
                     obj.save()
             else:
@@ -67,7 +67,7 @@ class CartManager(models.Manager):
         # for authenticated users
         object = None
         object_created = False
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             # return the current active cart if exists
             qs = self.model.objects.filter(user=request.user, active=True)
             if qs.count() == 1:
@@ -120,7 +120,7 @@ class CartManager(models.Manager):
         """
         user_obj = None
         if user is not None:
-            if user.is_authenticated():
+            if user.is_authenticated:
                 user_obj = user
         return self.model.objects.create(user=user_obj, active=active)
 

@@ -18,7 +18,7 @@ def login_page(request):
     next_ = request.GET.get('next', None)
     next_post = request.POST.get('next', None)
     redirect_to = next_ or next_post
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(redirect_to or "home")
     if form.is_valid():
         # get username and password
@@ -31,7 +31,10 @@ def login_page(request):
             # clear the form when the user logs in
             context['form'] = LoginForm()  # empty form
             # redirect user
-            if redirect_to and is_safe_url(redirect_to):
+            if redirect_to and is_safe_url(redirect_to, 
+                    allowed_hosts=request.get_host(), 
+                    require_https=request.is_secure()
+                ):
                 return redirect(redirect_to)
             return redirect("home")
         else:
@@ -40,7 +43,7 @@ def login_page(request):
 
 
 def register_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect("home")
     # fill the form with the last post request if the form has validation errors
     form = RegistrationForm(request.POST or None)
@@ -63,7 +66,7 @@ def register_page(request):
     return render(request, "auth/register.html", context)
 
 def logout_user(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # remove cart when user logs out
         request.session['cart_id'] = None
         logout(request)
@@ -71,7 +74,7 @@ def logout_user(request):
 
 
 def my_account(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('home')
     billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(
         user=request.user, email=request.user.email)

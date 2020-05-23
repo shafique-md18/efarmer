@@ -12,8 +12,8 @@ COUNTRIES = (
 
 
 class Address(models.Model):
-    billing_profile = models.ForeignKey(BillingProfile)
-    full_name = models.CharField(max_length=120, blank=True)
+    billing_profile = models.ForeignKey(BillingProfile, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=120)
     address_type = models.CharField(max_length=120, choices=ADDRESS_TYPES)
     address_line_1 = models.CharField(max_length=120)
     address_line_2 = models.CharField(max_length=120, null=True, blank=True)
