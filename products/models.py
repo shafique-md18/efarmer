@@ -83,7 +83,7 @@ class Product(models.Model):
     selling_price = models.DecimalField('Selling Price', max_digits=20, decimal_places=2, default=0.00)
     image = models.ImageField('Product Image', upload_to=path_and_rename, default='image_not_available.jpg')
     featured = models.BooleanField('Add to featured products?', default=False)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(unique=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True, editable=False)

@@ -1,6 +1,7 @@
-from django.conf.urls import url
+from django.urls import re_path
 from .views import SearchProductListView
 
+app_name = 'search'
 urlpatterns = [
-    url(r'^$',  SearchProductListView.as_view(), name="query"),
+    re_path(r'^$',  SearchProductListView.as_view(), name="query"),
 ]

@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 
 
 class BillingProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField()
     active = models.BooleanField(default=True)
 
