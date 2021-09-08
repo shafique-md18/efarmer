@@ -1,6 +1,6 @@
 Django>=2.2.10
 django-crispy-forms==1.9.1
-Pillow==7.1.2
+Pillow==8.3.2
 pytz==2020.1
 selenium==3.141.0
 sqlparse==0.3.1
